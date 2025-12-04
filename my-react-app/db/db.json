@@ -1,0 +1,191 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "kattsun",
+      "level": 7,
+      "exp": 40,
+      "coins": 100,
+      "tickets": {
+        "peru": 10,
+        "silver": 10,
+        "gold": 10,
+        "plum": 10
+      }
+    }
+  ],
+  "todos": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "資格勉強",
+      "difficulty": "hard",
+      "reward": "7"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "name": "買い出し",
+      "difficulty": "easy",
+      "reward": "5"
+    },
+    {
+      "id": "3",
+      "userId": 1,
+      "name": "面接対策",
+      "difficulty": "veryHard",
+      "reward": "12"
+    },
+    {
+      "id": "364d",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "7b11",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "a69a",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "5be7",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "ff1d",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "bfc8",
+      "userId": 1,
+      "name": "やることをきめる",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "048e",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "8738",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "853c",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "0649",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "35cf",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "07c5",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "8269",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "0495",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "78cc",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 1
+    },
+    {
+      "id": "d47b",
+      "userId": 1,
+      "name": "",
+      "difficulty": 1,
+      "reward": 2
+    }
+  ],
+  "habits": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "ラジオ体操",
+      "difficulty": "veryEasy",
+      "reward": "3"
+    },
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "身支度",
+      "difficulty": "Easy",
+      "reward": "4"
+    },
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "お風呂",
+      "difficulty": "nomal",
+      "reward": "6"
+    }
+  ],
+  "rewards": [
+    {
+      "id": "1",
+      "userId": 1,
+      "name": "音楽を聴く",
+      "difficulty": "normal",
+      "price": "5"
+    },
+    {
+      "id": "2",
+      "userId": 1,
+      "name": "ジュースを買う",
+      "difficulty": "normal",
+      "price": "5"
+    }
+  ]
+}
