@@ -1,8 +1,8 @@
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
 import { useState } from "react"
-import TodoDialog from "./dialog/TodoDialog"
-import HabitDialog from "./dialog/HabitDialog"
-import RewardDialog from "./dialog/RewardDialog"
+import AddTodoDialog from "./AddTodoDialog"
+import HabitDialog from "./HabitDialog"
+import RewardDialog from "./RewardDialog"
 
 const AddDialog = ({ isAddOpen, setIsAddOpen, activeTab }) => {
 
@@ -17,7 +17,7 @@ const AddDialog = ({ isAddOpen, setIsAddOpen, activeTab }) => {
     const renderDialog = () => {
         switch(activeTab) {
             case "todo":
-                return <TodoDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setAddOpen={setIsAddOpen}/>
+                return <AddTodoDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsAddOpen={setIsAddOpen}/>
             case "habit":
                 return <HabitDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setAddOpen={setIsAddOpen}/>
             case "reward":

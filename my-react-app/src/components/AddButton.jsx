@@ -1,7 +1,12 @@
+import { useState } from "react"
+import AddDialog from './dialog/AddDialog'
 import { HStack, Spacer, IconButton } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 
-const AddButton = ({ isAddOpen, setIsAddOpen }) => {
+const AddButton = ({ activeTab }) => {
+
+    const [ isAddOpen, setIsAddOpen ] = useState(false)
+
     return (
         <>
             <HStack
@@ -19,6 +24,8 @@ const AddButton = ({ isAddOpen, setIsAddOpen }) => {
                     <FaPlus />
                 </IconButton>
             </HStack>
+
+            <AddDialog isAddOpen={isAddOpen} setIsAddOpen={setIsAddOpen} activeTab={activeTab}/>
         </>
     )
 }

@@ -8,6 +8,7 @@ const MemoField = ({ memo, setMemo }) => {
             <Textarea
                 variant="subtle"
                 value={memo}
+                autoresize
                 onChange={(e) => setMemo(e.target.value)}
                 />
         </Field.Root>

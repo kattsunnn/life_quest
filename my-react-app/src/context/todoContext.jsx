@@ -5,7 +5,8 @@ const TodoContext = createContext();
 const TodoDispatchContext = createContext();
 
 const validateTodo = (todo) => {
-    if (todo.name || todo.name.trim() === "") {
+    console.log(todo)
+    if (!todo.taskName || todo.taskName.trim() === "") {
         throw new Error("タスク名を入力してください");
     }
     
@@ -27,10 +28,9 @@ const todoReducer = (todos, action) => {
         return [...todos, action.todo];
     
     case "todo/delete":
-        return todos.filter(todo => todo.id !== action.todoId);  // 修正
+        return todos.filter(todo => todo.id !== action.todo.id);  // 修正
 
     case "todo/patch":
-        // 同じIDを探して、見つかったら置き換え、それ以外はそのまま
         return todos.map(todo => 
             todo.id === action.todo.id ? action.todo : todo
         );

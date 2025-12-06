@@ -17,6 +17,7 @@ const todoApi = {
     },
     async patch(todo) {
         const res = await axios.put(`${BASE_URL}/${todo.id}`, todo)
+        return res.data
     }
 
 }
