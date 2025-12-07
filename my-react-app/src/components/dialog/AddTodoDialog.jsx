@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react" 
-import todoApi from "../../api/todo";
-import { useDispatchtodo, validateTodo } from "../../context/TodoContext";
 import { v4 as uuidv4 } from 'uuid'
 
 import TodoForm from "../form/TodoForm";
+import { useTodoActions } from "../../context/TodoContext";
 
 const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
     const [ taskName, setTaskName ] = useState("")
@@ -11,8 +10,8 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
     const [ reward, setReward ] = useState(1)
     const [ memo, setMemo ] = useState("")
 
-    const dispatch = useDispatchtodo();
-
+    const { createTodo } = useTodoActions()
+// IDや日付部分もcreatetodoでラップできそう
     useEffect(() => {
         if(isSubmit == false) return 
         const newTodo = {
@@ -21,13 +20,14 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
-            memo: memo
+            memo: memo,
+            isCompleted: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         }
-        const addTodo = async (newTodo) => {
+        const handleCreateTodo = async (newTodo) => {
             try {
-                validateTodo(newTodo)
-                const todoData = await todoApi.post(newTodo)
-                dispatch({ type: "todo/add", todo: todoData})
+                createTodo(newTodo)
                 setIsAddOpen(false)
             } catch (error){
                 alert(error.message)
@@ -35,7 +35,7 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
                 setIsSubmit(false)
             }
         }
-        addTodo(newTodo)
+        handleCreateTodo(newTodo)
         }, [isSubmit])
 
     return (

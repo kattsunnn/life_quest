@@ -8,7 +8,7 @@ const userApi = {
         const res = await axios.get(`${BASE_URL}/${userId}`);
         return res.data;
     },
-    async update(userId, updates) {
+    async patch(userId, updates) {
         const res = await axios.patch(`${BASE_URL}/${userId}`, updates);
         return res.data
     }

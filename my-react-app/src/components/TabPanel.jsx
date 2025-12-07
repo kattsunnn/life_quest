@@ -28,8 +28,7 @@ const TabPanel = ({ activeTab }) => {
                 return todos.map((todo) => (
                     <Todo 
                         key={todo.id}
-                        taskName={todo.taskName} 
-                        coin={todo.reward}
+                        todo={todo}
                         handleEdit={() => handleEdit(todo)}
                     />))
             case "habit":

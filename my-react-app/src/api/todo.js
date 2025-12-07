@@ -15,8 +15,8 @@ const todoApi = {
         const res = await axios.delete(`${BASE_URL}/${todo.id}`)
         return res.data
     },
-    async patch(todo) {
-        const res = await axios.put(`${BASE_URL}/${todo.id}`, todo)
+    async patch(id, updates) {
+        const res = await axios.put(`${BASE_URL}/${id}`, updates)
         return res.data
     }
 

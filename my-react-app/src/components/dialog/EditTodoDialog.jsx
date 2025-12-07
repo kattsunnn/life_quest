@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react" 
-import todoApi from "../../api/todo";
-import { useDispatchtodo, validateTodo } from "../../context/TodoContext";
+import { useTodoActions } from "../../context/TodoContext";
 
 import TodoForm from "../form/TodoForm";
 
@@ -10,23 +9,20 @@ const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
     const [ reward, setReward ] = useState(editData.reward)
     const [ memo, setMemo ] = useState(editData.memo)
 
-    const dispatch = useDispatchtodo();
+    const { editTodo } = useTodoActions()
 
     useEffect(() => {
         if(isSubmit == false) return 
         const newTodo = {
-            id: editData.id,
-            userId: 1,
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
-            memo: memo
+            memo: memo,
+            updatedAt: new Date().toISOString()
         }
-        const editTodo = async (newTodo) => {
+        const handleEditTodo = async (updates) => {
             try {
-                validateTodo(newTodo)
-                const todoData = await todoApi.patch(newTodo)
-                dispatch({ type: "todo/patch", todo: todoData})
+                editTodo(editData.id, updates)
                 setIsEditOpen(false)
             } catch (error){
                 alert(error.message)
@@ -34,7 +30,7 @@ const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
                 setIsSubmit(false)
             }
         }
-        editTodo(newTodo)
+        handleEditTodo(newTodo)
         }, [isSubmit])
 
     return (

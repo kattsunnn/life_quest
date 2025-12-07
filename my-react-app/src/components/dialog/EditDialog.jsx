@@ -1,6 +1,5 @@
 import { useState } from "react"
-import todoApi from "../../api/todo";
-import { useDispatchtodo, validateTodo } from "../../context/TodoContext";
+import { useTodoActions } from "../../context/TodoContext";
 
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
 import EditTodoDialog from "./EditTodoDialog"
@@ -10,13 +9,11 @@ import RewardDialog from "./RewardDialog"
 const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
 
     const [ isSubmit, setIsSubmit ] = useState(false);
-    const dispatch = useDispatchtodo();
+    const { deleteTodo } = useTodoActions()
 
-    const deleteTodo = async () => {
+    const handleDeleteTodo = async () => {
         try {
-            validateTodo(editData)
-            const todoData = await todoApi.delete(editData)
-            dispatch({ type: "todo/delete", todo: todoData})
+            deleteTodo(editData.id)
             setIsEditOpen(false)
         } catch (error){
             alert(error.message)
@@ -73,7 +70,7 @@ const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
 
                                 <Button 
                                     bg="red.500"
-                                    onClick={() => deleteTodo()}
+                                    onClick={() => handleDeleteTodo()}
                                     >
                                     削除
                                 </Button>
