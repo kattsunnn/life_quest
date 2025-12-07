@@ -5,7 +5,7 @@
       "username": "kattsun",
       "level": 7,
       "exp": 40,
-      "coins": 113,
+      "coins": 114,
       "tickets": {
         "peru": 10,
         "silver": 10,
@@ -25,18 +25,16 @@
       "memo": "",
       "isCompleted": true,
       "createdAt": "2025-12-07T11:29:52.038Z",
-      "updatedAt": "2025-12-07T11:39:49.399Z"
+      "updatedAt": "2025-12-07T11:59:58.495Z"
     },
     {
-      "id": "28a3",
-      "userId": 1,
       "taskName": "あああ",
-      "difficulty": 1,
-      "reward": 1,
+      "difficulty": 4,
+      "reward": 7,
       "memo": "",
-      "isCompleted": false,
-      "createdAt": "2025-12-07T11:39:56.679Z",
-      "updatedAt": "2025-12-07T11:39:56.679Z"
+      "updatedAt": "2025-12-07T12:07:14.585Z",
+      "id": "28a3",
+      "isCompleted": false
     }
   ],
   "rewards": [

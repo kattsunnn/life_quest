@@ -1,29 +1,27 @@
 import { useState, useEffect } from "react" 
-import { useTodoActions } from "../../context/TodoContext";
+import { useHabitActions } from "../../context/habitContext"
+import HabitForm from "../Form/HabitForm"
 
-
-import TodoForm from "../form/TodoForm";
-
-const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
+const EditHabitDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
     const [ taskName, setTaskName ] = useState(editData.taskName)
     const [ difficulty, setDifficulty ] = useState(editData.difficulty)
     const [ reward, setReward ] = useState(editData.reward)
     const [ memo, setMemo ] = useState(editData.memo)
 
-    const { editTodo } = useTodoActions()
+    const { editHabit } = useHabitActions()
 
     useEffect(() => {
         if(isSubmit == false) return 
-        const todoUpdates = {
+        const habitUpdates = {
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,
             updatedAt: new Date().toISOString()
         }
-        const handleEditTodo = async (updates) => {
+        const handleEditHabit = async (updates) => {
             try {
-                await editTodo(editData.id, updates)
+                await editHabit(editData.id, updates)
                 setIsEditOpen(false)
             } catch (error){
                 alert(error.message)
@@ -31,11 +29,11 @@ const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
                 setIsSubmit(false)
             }
         }
-        handleEditTodo(todoUpdates)
+        handleEditHabit(habitUpdates)
         }, [isSubmit])
 
     return (
-        <TodoForm
+        <HabitForm
             taskName={taskName} setTaskName={setTaskName}
             difficulty={difficulty} setDifficulty={setDifficulty}
             reward={reward} setReward={setReward}
@@ -43,4 +41,4 @@ const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
     )
 } 
 
-export default EditTodoDialog
+export default EditHabitDialog

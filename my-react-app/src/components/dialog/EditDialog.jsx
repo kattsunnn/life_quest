@@ -3,7 +3,7 @@ import { useTodoActions } from "../../context/todoContext";
 import { useUserActions } from "../../context/userContext"
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
 import EditTodoDialog from "./EditTodoDialog"
-
+import EditHabitDialog from "./EditHabitDialog";
 
 const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
 
@@ -36,7 +36,9 @@ const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
                             isSubmit={isSubmit} setIsSubmit={setIsSubmit}
                             setIsEditOpen={setIsEditOpen} editData={editData}/>
             case "habit":
-                return <HabitDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsEditOpen={setIsEditOpen}/>
+                return <EditHabitDialog 
+                            isSubmit={isSubmit} setIsSubmit={setIsSubmit} 
+                            setIsEditOpen={setIsEditOpen} editData={editData}/>
             case "reward":
                 // return <RewardDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsEditOpen={setIsEditOpen}/>
             default:

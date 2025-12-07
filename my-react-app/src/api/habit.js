@@ -17,6 +17,7 @@ const habitApi = {
     },
     async patch(id, updates) {
         const res = await axios.put(`${BASE_URL}/${id}`, updates)
+        return res.data
     }
 
 }
