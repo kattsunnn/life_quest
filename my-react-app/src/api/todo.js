@@ -11,8 +11,8 @@ const todoApi = {
         const res = await axios.post(BASE_URL, todo);
         return res.data
     },
-    async delete(todo) {
-        const res = await axios.delete(`${BASE_URL}/${todo.id}`)
+    async delete(id) {
+        const res = await axios.delete(`${BASE_URL}/${id}`)
         return res.data
     },
     async patch(id, updates) {

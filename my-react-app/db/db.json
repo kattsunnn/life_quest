@@ -14,40 +14,29 @@
       }
     }
   ],
-  "todos": [
+  "todos": [],
+  "habits": [
     {
-      "id": "84e4",
+      "id": "de4b",
       "userId": 1,
-      "taskName": "お風呂掃除",
+      "taskName": "あ",
+      "difficulty": 1,
+      "reward": 1,
+      "memo": "",
+      "isCompleted": true,
+      "createdAt": "2025-12-07T11:29:52.038Z",
+      "updatedAt": "2025-12-07T11:39:49.399Z"
+    },
+    {
+      "id": "28a3",
+      "userId": 1,
+      "taskName": "あああ",
       "difficulty": 1,
       "reward": 1,
       "memo": "",
       "isCompleted": false,
-      "createdAt": "2025-12-06T20:54:24.982Z",
-      "updatedAt": "2025-12-07T06:00:51.438Z"
-    }
-  ],
-  "habits": [
-    {
-      "id": "1",
-      "userId": 1,
-      "name": "ラジオ体操",
-      "difficulty": "veryEasy",
-      "reward": "3"
-    },
-    {
-      "id": "1",
-      "userId": 1,
-      "name": "身支度",
-      "difficulty": "Easy",
-      "reward": "4"
-    },
-    {
-      "id": "1",
-      "userId": 1,
-      "name": "お風呂",
-      "difficulty": "nomal",
-      "reward": "6"
+      "createdAt": "2025-12-07T11:39:56.679Z",
+      "updatedAt": "2025-12-07T11:39:56.679Z"
     }
   ],
   "rewards": [

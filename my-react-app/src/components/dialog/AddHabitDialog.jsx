@@ -1,28 +1,28 @@
 import { useState, useEffect } from "react" 
 
-import TodoForm from "../form/TodoForm";
-import { useTodoActions } from "../../context/TodoContext";
+import HabitForm from "../form/HabitForm";
+import { useHabitActions } from "../../context/habitContext";
 
-const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
+const AddHabitDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
     const [ taskName, setTaskName ] = useState("")
     const [ difficulty, setDifficulty ] = useState(1)
     const [ reward, setReward ] = useState(1)
     const [ memo, setMemo ] = useState("")
 
-    const { createTodo } = useTodoActions()
+    const { createHabit } = useHabitActions()
 // IDや日付部分もcreatetodoでラップできそう
     useEffect(() => {
         if(isSubmit == false) return 
-        const newTodo = {
+        const newHabit = {
             userId: 1,
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,
         }
-        const handleCreateTodo = async (newTodo) => {
+        const handleCreateHabit = async (newHabit) => {
             try {
-                await createTodo(newTodo)
+                await createHabit(newHabit)
                 setIsAddOpen(false)
             } catch (error){
                 alert(error.message)
@@ -30,11 +30,11 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
                 setIsSubmit(false)
             }
         }
-        handleCreateTodo(newTodo)
+        handleCreateHabit(newHabit)
         }, [isSubmit])
 
     return (
-        <TodoForm
+        <HabitForm
             taskName={taskName} setTaskName={setTaskName}
             difficulty={difficulty} setDifficulty={setDifficulty}
             reward={reward} setReward={setReward}
@@ -42,4 +42,4 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
     )
 } 
 
-export default AddTodoDialog
+export default AddHabitDialog

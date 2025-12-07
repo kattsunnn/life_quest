@@ -1,19 +1,22 @@
 import { useState } from "react"
-import { useTodoActions } from "../../context/TodoContext";
-
+import { useTodoActions } from "../../context/todoContext";
+import { useUserActions } from "../../context/userContext"
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
 import EditTodoDialog from "./EditTodoDialog"
-import HabitDialog from "./HabitDialog"
-import RewardDialog from "./RewardDialog"
+
 
 const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
 
     const [ isSubmit, setIsSubmit ] = useState(false);
     const { deleteTodo } = useTodoActions()
+    const { subCoins } = useUserActions()
 
     const handleDeleteTodo = async () => {
         try {
-            deleteTodo(editData.id)
+            await deleteTodo(editData.id)
+            if (editData.isCompleted) {
+                await subCoins(editData.reward)
+            }      
             setIsEditOpen(false)
         } catch (error){
             alert(error.message)
@@ -33,7 +36,7 @@ const EditDialog = ({ isEditOpen, setIsEditOpen, activeTab, editData }) => {
                             isSubmit={isSubmit} setIsSubmit={setIsSubmit}
                             setIsEditOpen={setIsEditOpen} editData={editData}/>
             case "habit":
-                // return <HabitDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsEditOpen={setIsEditOpen}/>
+                return <HabitDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsEditOpen={setIsEditOpen}/>
             case "reward":
                 // return <RewardDialog isSubmit={isSubmit} setIsSubmit={setIsSubmit} setIsEditOpen={setIsEditOpen}/>
             default:

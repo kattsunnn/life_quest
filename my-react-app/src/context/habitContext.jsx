@@ -1,25 +1,62 @@
 import { createContext, useContext, useEffect, useReducer } from "react"
 import habitApi from "../api/habit"
+import { v4 as uuidv4 } from 'uuid'
 
 const HabitContext = createContext();
 const HabitDispatchContext = createContext();
+const HabitActionsContext = createContext();
+
+const sortHabits = (habits) => {
+    const sorted = [...habits].sort((a, b) => {
+        if (a.isCompleted !== b.isCompleted) {
+            return a.isCompleted ? 1 : -1;
+        }
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+    });
+    return sorted;
+}
+
+const validateHabit = (data) => {
+    if (data.hasOwnProperty('taskName')) {
+        if (!data.taskName || data.taskName.trim() === "") {
+            throw new Error("タスク名を入力してください");
+        }
+    }
+    if (data.hasOwnProperty('difficulty')) {
+        if (data.difficulty < 1 || data.difficulty > 5) {
+            throw new Error("難易度は1-5の範囲で設定してください");
+        }
+    }
+    if (data.hasOwnProperty('reward')) {
+        if (data.reward < 1) {
+            throw new Error("報酬は1以上で設定してください");
+        }
+    }
+}
 
 const habitReducer = (habits, action) => {
-  switch (action.type) {
+    let newHabits;
+
+    switch (action.type) {
     case "habit/init":
-        return action.habit;
-    case "habit/add":
-        return [...habits, action.habit];
+        return sortHabits(action.habit);
+
+    case "habit/add": 
+        newHabits = [...habits, action.habit];
+        return sortHabits(newHabits);
+
     case "habit/delete":
-        return habits.filter(habit => habit.id !== action.habitId);  // 修正
+        newHabits = habits.filter(habit => habit.id !== action.habit.id);
+        return sortHabits(newHabits);
+
     case "habit/patch":
-        // 同じIDを探して、見つかったら置き換え、それ以外はそのまま
-        return habits.map(habit => 
+        newHabits = habits.map(habit => 
             habit.id === action.habit.id ? action.habit : habit
         );
+        return sortHabits(newHabits);
     default:
         return habits;
-  }
+    }
 };
 
 const HabitProvider = ({children}) => {
@@ -32,17 +69,44 @@ const HabitProvider = ({children}) => {
         })
     }, [])
 
+    const actions = {
+        createHabit: async (habit) => {
+            validateHabit(habit)
+            const habitToCreate = {
+                id: uuidv4,
+                ...habit,
+                isCompleted: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+            const habitData = await habitApi.post(habitToCreate)
+            dispatch({ type: "habit/add", habit: habitData })
+        },
+        editHabit: async (id, updates) => {
+            validateHabit(updates)
+            const habitData = await habitApi.patch(id, updates)
+            dispatch({ type: "habit/patch", habit: habitData })
+        },
+        deleteHabit: async (id) => {
+            const habitData = await habitApi.delete(id)
+            dispatch({ type: "habit/delete", habit: habitData })
+        }
+    }
+
     return (
         <HabitContext.Provider value={habits}>
             <HabitDispatchContext.Provider value={dispatch}>
-                {children}
+                <HabitActionsContext value={actions}>
+                    {children}
+                </HabitActionsContext>
             </HabitDispatchContext.Provider>
         </HabitContext.Provider>
     )
 }
 
 const useHabit = () => useContext(HabitContext)
-const useDispatchhabit = () => useContext(HabitDispatchContext)
+const useDispatchHabit = () => useContext(HabitDispatchContext)
+const useHabitActions = () => useContext(HabitActionsContext)
 
-export { useHabit, useDispatchhabit, HabitProvider };
+export { useHabit, useDispatchHabit, useHabitActions, HabitProvider };
 

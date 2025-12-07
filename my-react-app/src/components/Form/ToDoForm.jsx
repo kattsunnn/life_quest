@@ -1,5 +1,4 @@
 import { VStack } from "@chakra-ui/react"
-import { useState, useEffect } from "react"
 
 import TaskNameField from "../field/TaskNameField";
 import DifficultyField from "../field/DifficultyField";

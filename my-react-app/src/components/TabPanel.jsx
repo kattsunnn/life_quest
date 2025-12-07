@@ -3,7 +3,8 @@ import { useTodo } from "../context/todoContext"
 import { useHabit } from "../context/habitContext";
 import { useReward } from "../context/rewardContext";
 import { Flex } from "@chakra-ui/react";
-import Todo from "./Todo"
+import TodoItem from "./Item/TodoItem"
+import HabitItem from "./Item/HabitItem";
 import EditDialog from "./dialog/EditDialog";
 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
@@ -26,15 +27,18 @@ const TabPanel = ({ activeTab }) => {
         switch(activeTab) {
             case "todo":
                 return todos.map((todo) => (
-                    <Todo 
+                    <TodoItem 
                         key={todo.id}
                         todo={todo}
                         handleEdit={() => handleEdit(todo)}
                     />))
             case "habit":
-                // return habits.map((habit) => (
-                //         // <Todo name={habit.name} coin={habit.reward} />
-                //         ))
+                return habits.map((habit) => (
+                    <HabitItem 
+                        key={habit.id}
+                        habit={habit}
+                        handleEdit={() => handleEdit(habit)}
+                    />))
             case "reward":
                 // return rewards.map((reward) => (
                 //         // <Todo name={reward.name} coin={reward.price} />

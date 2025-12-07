@@ -1,25 +1,22 @@
-import todoApi from "../api/todo"
-import { useDispatchtodo } from "../context/TodoContext"
-import userApi from "../api/user"
-import { useUserActions } from "../context/userContext"
+import { useTodoActions } from "../../context/TodoContext"
+import { useUserActions } from "../../context/userContext"
 import { HStack, Checkbox, Spacer } from "@chakra-ui/react"
 import { FaCoins } from "react-icons/fa"
-import ItemIcon from "./ItemIcon"
+import ItemIcon from "../ItemIcon"
 
-const Todo = ({ todo, handleEdit }) => {
-    const dispatchTodo = useDispatchtodo()
+const TodoItem = ({ todo, handleEdit }) => {
+    const { editTodo } = useTodoActions();
     const { addCoins, subCoins } = useUserActions()
 
     const handleCheckboxChange = async (checked) => {
-        const updatedTodo = {
+        const todoUpdates = {
             ...todo,
             isCompleted: checked.checked,
             updatedAt: new Date().toISOString()
         }
         
         try {
-            const todoData = await todoApi.patch(updatedTodo)
-            dispatchTodo({ type: "todo/patch", todo: todoData})
+            await editTodo(todo.id, todoUpdates)
             if(checked.checked){
                 await addCoins(todo.reward)
             } else {
@@ -65,4 +62,4 @@ const Todo = ({ todo, handleEdit }) => {
     )
 }
 
-export default Todo;
+export default TodoItem;

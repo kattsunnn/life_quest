@@ -11,12 +11,12 @@ const habitApi = {
         const res = await axios.post(BASE_URL, habit);
         return res.data
     },
-    async delete(habit) {
-        const res = await axios.delete(`${BASE_URL}/${habit.id}`)
+    async delete(id) {
+        const res = await axios.delete(`${BASE_URL}/${id}`)
         return res.data
     },
-    async patch(habit) {
-        const res = await axios.put(`${BASE_URL}/${habit.id}`, habit)
+    async patch(id, updates) {
+        const res = await axios.put(`${BASE_URL}/${id}`, updates)
     }
 
 }

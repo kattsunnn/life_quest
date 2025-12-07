@@ -1,12 +1,9 @@
 ## Todo
+- habit
+- reward
+
 - userContextにValidationを追加
-  - コインマイナスを減らす
 - Exp上昇を追加
-- 
-- ApiをContextでラップ
-  - todo
-- todoのpatchの全体更新を部分更新にする
-  - 削除したTodoのコインはきえる
   - 
 - Todoコンポーネント名修正
 - Todoコンポーネントに難易度表示

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react"
 import todoApi from "../api/todo"
+import { v4 as uuidv4 } from 'uuid'
 
 const TodoContext = createContext();
 const TodoDispatchContext = createContext();
@@ -71,7 +72,14 @@ const TodoProvider = ({children}) => {
     const actions = {
         createTodo: async (todo) => {
             validateTodo(todo)
-            const todoData = await todoApi.post(newTodo)
+            const todoToCreate = {
+                id: uuidv4,
+                ...todo,
+                isCompleted: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            }
+            const todoData = await todoApi.post(todoToCreate)
             dispatch({ type: "todo/add", todo: todoData })
         },
         editTodo: async (id, updates) => {
