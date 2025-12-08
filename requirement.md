@@ -1,5 +1,7 @@
 ## Todo
+- ページ遷移についてリファクタリング
 - habit
+  - 修正：editDialogにDeleteHabitをいれる
 - reward
 
 - userContextにValidationを追加
