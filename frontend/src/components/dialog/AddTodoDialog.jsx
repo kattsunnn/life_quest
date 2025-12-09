@@ -14,8 +14,7 @@ const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
     useEffect(() => {
         if(isSubmit == false) return 
         const newTodo = {
-            user_id: 1,
-            name: taskName,
+            taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,

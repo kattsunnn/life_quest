@@ -4,7 +4,7 @@ import { useTodoActions } from "../../context/TodoContext";
 import TodoForm from "../form/TodoForm";
 
 const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
-    const [ taskName, setTaskName ] = useState(editData.name)
+    const [ taskName, setTaskName ] = useState(editData.taskName)
     const [ difficulty, setDifficulty ] = useState(editData.difficulty)
     const [ reward, setReward ] = useState(editData.reward)
     const [ memo, setMemo ] = useState(editData.memo)
@@ -14,7 +14,7 @@ const EditTodoDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
     useEffect(() => {
         if(isSubmit == false) return 
         const todoUpdates = {
-            name: taskName,
+            taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,

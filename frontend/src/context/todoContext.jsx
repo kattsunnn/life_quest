@@ -6,6 +6,50 @@ const TodoContext = createContext();
 const TodoDispatchContext = createContext();
 const TodoActionsContext = createContext();
 
+function todoServerToClient(todo) {
+    const mapping = {
+        id: "id",
+        user_id: "userId",
+        name: "taskName",
+        difficulty: "difficulty",
+        reward: "reward",
+        memo: "memo",
+        is_completed: "isCompleted",
+        created_at: "createdAt",
+        updated_at: "updatedAt",
+    };
+
+    const result = {};
+    for (const [serverKey, clientKey] of Object.entries(mapping)) {
+        if (todo[serverKey] !== undefined) {
+            result[clientKey] = todo[serverKey];
+        }
+    }
+    return result;
+}
+
+function todoClientToServer(todo) {
+    const mapping = {
+        id: "id",
+        userId: "user_id",
+        taskName: "name",
+        difficulty: "difficulty",
+        reward: "reward",
+        memo: "memo",
+        isCompleted: "is_completed",
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+    };
+
+    const result = {};
+    for (const [clientKey, serverKey] of Object.entries(mapping)) {
+        if (todo[clientKey] !== undefined) {
+            result[serverKey] = todo[clientKey];
+        }
+    }
+    return result;
+}
+
 const sortTodos = (todos) => {
     const sorted = [...todos].sort((a, b) => {
         if (a.isCompleted !== b.isCompleted) {
@@ -65,7 +109,7 @@ const TodoProvider = ({children}) => {
 
     useEffect(() => {
         todoApi.get(userId).then(data => {
-            dispatch({ type: "todo/init", todos: data.todos})
+            dispatch({ type: "todo/init", todos: data.todos.map(todoServerToClient)})
         })
     }, [])
 
@@ -73,21 +117,22 @@ const TodoProvider = ({children}) => {
         createTodo: async (todo) => {
             validateTodo(todo)
             const todoToCreate = {
+                userId: userId,
                 ...todo,
                 isCompleted: false,
             }
-            const todoData = await todoApi.post(todoToCreate)
-            dispatch({ type: "todo/add", todo: todoData })
+            const todoData = await todoApi.post(todoClientToServer(todoToCreate))
+            dispatch({ type: "todo/add", todo: todoServerToClient(todoData) })
         },
         editTodo: async (id, updates) => {
             validateTodo(updates)
-            const todoData = await todoApi.patch(id, updates)
-            dispatch({ type: "todo/patch", todo: todoData })
+            const todoData = await todoApi.patch(id, todoClientToServer(updates))
+            dispatch({ type: "todo/patch", todo: todoServerToClient(todoData) })
         },
         deleteTodo: async (id) => {
             const todoData = await todoApi.delete(id)
             console.log(todoData)
-            dispatch({ type: "todo/delete", todo: todoData })
+            dispatch({ type: "todo/delete", todo: todoServerToClient(todoData) })
         }
     }
 

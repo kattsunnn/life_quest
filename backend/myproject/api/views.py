@@ -96,6 +96,19 @@ class TodoDetailView(APIView):
     def delete(self, request, pk):
         return delete_todo(request, pk)
 
+def todo_to_dict(todo):
+    return {
+        'id': todo.id,
+        'user_id': todo.user_id,
+        'name': todo.name,
+        'difficulty': todo.difficulty,
+        'reward': todo.reward,
+        'memo': todo.memo,
+        'is_completed': todo.is_completed,
+        'created_at': todo.created_at.isoformat(),
+        'updated_at': todo.updated_at.isoformat(),
+    }
+
 def get_todos(request):
     user_id = request.GET.get('user_id')
     if not user_id:
@@ -110,23 +123,8 @@ def get_todos(request):
         return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
     
     todos = Todo.objects.filter(user=user)
-    
-    data = {
-        'todos': [
-            {
-                'id': todo.id,
-                'name': todo.name,
-                'difficulty': todo.difficulty,
-                'reward': todo.reward,
-                'memo': todo.memo,
-                'is_completed': todo.is_completed,
-                'created_at': todo.created_at.isoformat(),
-                'updated_at': todo.updated_at.isoformat(),
-            }
-            for todo in todos
-        ]
-    }
-    return JsonResponse(data)
+    res_data = { 'todos': [ todo_to_dict(todo) for todo in todos ] }
+    return JsonResponse(res_data)
 
 def post_todo(request):
     try:
@@ -154,18 +152,8 @@ def post_todo(request):
         reward=data.get('reward', 1),
         memo=data.get('memo', ''),
     )
-
-    response_data = {
-        'id': todo.id,
-        'name': todo.name,
-        'difficulty': todo.difficulty,
-        'reward': todo.reward,
-        'memo': todo.memo,
-        'is_completed': todo.is_completed,
-        'created_at': todo.created_at.isoformat(),
-        'updated_at': todo.updated_at.isoformat(),
-    }
-    return JsonResponse(response_data, status=201)
+    res_data = todo_to_dict(todo)
+    return JsonResponse(res_data, status=201)
 
 def patch_todo(request, pk):
     try:
@@ -190,35 +178,17 @@ def patch_todo(request, pk):
 
     todo.save()
 
-    response_data = {
-        'id': todo.id,
-        'name': todo.name,
-        'difficulty': todo.difficulty,
-        'reward': todo.reward,
-        'memo': todo.memo,
-        'is_completed': todo.is_completed,
-        'created_at': todo.created_at.isoformat(),
-        'updated_at': todo.updated_at.isoformat(),
-    }
-    return JsonResponse(response_data)
+    res_data = todo_to_dict(todo)
+    return JsonResponse(res_data, status=201)
 
 def delete_todo(request, pk):
     try:
         todo = Todo.objects.get(pk=pk)
     except Todo.DoesNotExist:
         return JsonResponse({'error': 'Todoが見つかりません'}, status=404)
-    response_data = {
-        'id': todo.id,
-        'name': todo.name,
-        'difficulty': todo.difficulty,
-        'reward': todo.reward,
-        'memo': todo.memo,
-        'is_completed': todo.is_completed,
-        'created_at': todo.created_at.isoformat(),
-        'updated_at': todo.updated_at.isoformat(),
-    }
+    res_data = todo_to_dict(todo)
     todo.delete()
-    return JsonResponse(response_data)
+    return JsonResponse(res_data, status=201)
 
 
     

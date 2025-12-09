@@ -13,7 +13,7 @@ const EditHabitDialog = ({ isSubmit, setIsSubmit, setIsEditOpen, editData}) => {
     useEffect(() => {
         if(isSubmit == false) return 
         const habitUpdates = {
-            name: taskName,
+            taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo

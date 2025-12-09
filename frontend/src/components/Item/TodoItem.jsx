@@ -10,11 +10,8 @@ const TodoItem = ({ todo, handleEdit }) => {
 
     const handleCheckboxChange = async (checked) => {
         const todoUpdates = {
-            ...todo,
             isCompleted: checked.checked,
-            updatedAt: new Date().toISOString()
         }
-        
         try {
             await editTodo(todo.id, todoUpdates)
             if(checked.checked){
@@ -53,7 +50,7 @@ const TodoItem = ({ todo, handleEdit }) => {
                 textDecoration={todo.isCompleted ? "line-through" : "none"}
                 color={todo.isCompleted ? "gray.500" : "inherit"}
             >
-                    {todo.name}
+                    {todo.taskName}
             </Checkbox.Label>
             </Checkbox.Root>
             <Spacer />
