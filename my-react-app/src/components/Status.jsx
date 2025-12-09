@@ -25,15 +25,15 @@ const Status = () => {
                     >
                     <Text
                         fontWeight="bold" alignSelf="start">
-                        {userData.username}
+                        {userData.name}
                     </Text>
                     <ExpBar userLevel={userData.level} userExp={userData.exp}/>
                     <ItemIcon icon={FaCoins} color="gold" count={userData.coins} />
                     <HStack gap="3">
-                        <ItemIcon icon={FaTicketAlt} color="peru" count={userData.tickets.peru} />
-                        <ItemIcon icon={FaTicketAlt} color="silver" count={userData.tickets.silver} />
-                        <ItemIcon icon={FaTicketAlt} color="gold" count={userData.tickets.gold} />
-                        <ItemIcon icon={FaTicketAlt} color="plum" count={userData.tickets.plum} />
+                        <ItemIcon icon={FaTicketAlt} color="peru" count={userData.tickets_peru} />
+                        <ItemIcon icon={FaTicketAlt} color="silver" count={userData.tickets_silver} />
+                        <ItemIcon icon={FaTicketAlt} color="gold" count={userData.tickets_gold} />
+                        <ItemIcon icon={FaTicketAlt} color="plum" count={userData.tickets_plum} />
                     </HStack>
                 </Flex>
 
