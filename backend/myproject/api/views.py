@@ -1,14 +1,26 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from .models import User
+import json
+from .models import User, Todo
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
+def index(request):
+    return render(request, "index.html")
 
-# ===== ユーザー詳細取得（GETのみ） =====
 @csrf_exempt
-@require_http_methods(["GET"])
-def user_detail(request, pk):
+def user(request, pk):
+    if request.method == 'GET':
+        return get_user(request, pk)
+    elif request.method == 'PATCH':
+        return patch_user(request, pk)
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
+def get_user(request, pk):
     try:
         user = User.objects.get(pk=pk)
     except User.DoesNotExist:
@@ -27,6 +39,186 @@ def user_detail(request, pk):
         'created_at': user.created_at.isoformat(),
         'updated_at': user.updated_at.isoformat(),
     }
-    
-    # ④ 辞書 → JSON
     return JsonResponse(data)
+
+def patch_user(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
+
+    data = json.loads(request.body)
+
+    if 'name' in data:
+        user.name = data['name']
+    if 'level' in data:
+        user.level = data['level']
+    if 'exp' in data:
+        user.exp = data['exp']
+    if 'coins' in data:
+        user.coins = data['coins']
+    if 'tickets_peru' in data:
+        user.tickets_peru = data['tickets_peru']
+    if 'tickets_silver' in data:
+        user.tickets_silver = data['tickets_silver']
+    if 'tickets_gold' in data:
+        user.tickets_gold = data['tickets_gold']
+    if 'tickets_plum' in data:
+        user.tickets_plum = data['tickets_plum']
+
+    user.save()
+
+    response_data = {
+        'id': user.id,
+        'name': user.name,
+        'level': user.level,
+        'exp': user.exp,
+        'coins': user.coins,
+        'tickets_peru': user.tickets_peru,
+        'tickets_silver': user.tickets_silver,
+        'tickets_gold': user.tickets_gold,
+        'tickets_plum': user.tickets_plum,
+        'created_at': user.created_at.isoformat(),
+        'updated_at': user.updated_at.isoformat(),
+    }
+    return JsonResponse(response_data)
+
+
+class TodoAllView(APIView):
+    def get(self, request):
+        return get_todos(request)
+    def post(self, request):
+        return post_todo(request)
+
+class TodoDetailView(APIView):
+    def patch(self, request, pk):
+        return patch_todo(request, pk)
+    def delete(self, request, pk):
+        return delete_todo(request, pk)
+
+def get_todos(request):
+    user_id = request.GET.get('user_id')
+    if not user_id:
+        return JsonResponse({'error': 'user_idが指定されていません'}, status=400)
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return JsonResponse({'error': '無効なuser_idです'}, status=400)
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
+    
+    todos = Todo.objects.filter(user=user)
+    
+    data = {
+        'todos': [
+            {
+                'id': todo.id,
+                'name': todo.name,
+                'difficulty': todo.difficulty,
+                'reward': todo.reward,
+                'memo': todo.memo,
+                'is_completed': todo.is_completed,
+                'created_at': todo.created_at.isoformat(),
+                'updated_at': todo.updated_at.isoformat(),
+            }
+            for todo in todos
+        ]
+    }
+    return JsonResponse(data)
+
+def post_todo(request):
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': '無効なJSONです'}, status=400)
+    
+    user_id = data.get('user_id')
+    name = data.get('name')
+
+    if not user_id:
+        return JsonResponse({'error': 'user_idが指定されていません'}, status=400)
+    if not name:
+        return JsonResponse({'error': 'nameが指定されていません'}, status=400)
+    
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
+    
+    todo = Todo.objects.create(
+        user=user,
+        name=name,
+        difficulty=data.get('difficulty', 1),
+        reward=data.get('reward', 1),
+        memo=data.get('memo', ''),
+    )
+
+    response_data = {
+        'id': todo.id,
+        'name': todo.name,
+        'difficulty': todo.difficulty,
+        'reward': todo.reward,
+        'memo': todo.memo,
+        'is_completed': todo.is_completed,
+        'created_at': todo.created_at.isoformat(),
+        'updated_at': todo.updated_at.isoformat(),
+    }
+    return JsonResponse(response_data, status=201)
+
+def patch_todo(request, pk):
+    try:
+        todo = Todo.objects.get(pk=pk)
+    except Todo.DoesNotExist:
+        return JsonResponse({})
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': '無効なJSONです'}, status=400)
+
+    if 'name' in data:
+        todo.name = data['name']
+    if 'difficulty' in data:
+        todo.difficulty = data['difficulty']
+    if 'reward' in data:
+        todo.reward = data['reward']
+    if 'memo' in data:
+        todo.memo = data['memo']
+    if 'is_completed' in data:
+        todo.is_completed = data['is_completed']
+
+    todo.save()
+
+    response_data = {
+        'id': todo.id,
+        'name': todo.name,
+        'difficulty': todo.difficulty,
+        'reward': todo.reward,
+        'memo': todo.memo,
+        'is_completed': todo.is_completed,
+        'created_at': todo.created_at.isoformat(),
+        'updated_at': todo.updated_at.isoformat(),
+    }
+    return JsonResponse(response_data)
+
+def delete_todo(request, pk):
+    try:
+        todo = Todo.objects.get(pk=pk)
+    except Todo.DoesNotExist:
+        return JsonResponse({'error': 'Todoが見つかりません'}, status=404)
+    response_data = {
+        'id': todo.id,
+        'name': todo.name,
+        'difficulty': todo.difficulty,
+        'reward': todo.reward,
+        'memo': todo.memo,
+        'is_completed': todo.is_completed,
+        'created_at': todo.created_at.isoformat(),
+        'updated_at': todo.updated_at.isoformat(),
+    }
+    todo.delete()
+    return JsonResponse(response_data)
+
+
+    

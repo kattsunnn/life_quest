@@ -1,0 +1,29 @@
+### ユーザー取得
+GET http://localhost:8000/users/1/
+Content-Type: application/json
+
+### ユーザー更新
+PATCH http://localhost:8000/users/1/
+Content-Type: application/json
+
+{
+  "name": "naoki",
+  "coins": 100,
+  "exp": 50
+}
+
+### Todo一覧取得
+GET http://localhost:8000/todos?user_id=1
+Content-Type: application/json
+
+### Todo作成
+POST http://localhost:8000/todos/
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "name": "サンプルタスク",
+  "difficulty": 3,
+  "reward": 5,
+  "memo": "テストメモ"
+}
