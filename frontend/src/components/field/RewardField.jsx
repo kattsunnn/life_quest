@@ -10,6 +10,7 @@ const RewardField = ({ reward, setReward }) => {
                 <HStack>
                 <FaCoins color="gold"/>
                 <NumberInput.Root 
+                    min={1}
                     value={reward}
                     onValueChange={(e) => setReward(e.valueAsNumber)}
                     width="200px">

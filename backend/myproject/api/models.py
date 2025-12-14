@@ -39,6 +39,7 @@ class Habit(models.Model):
     difficulty = models.IntegerField(default=1)
     reward = models.IntegerField(default=1)
     memo = models.TextField(blank=True, default='')
+    is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

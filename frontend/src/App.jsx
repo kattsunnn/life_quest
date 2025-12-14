@@ -11,6 +11,8 @@ import { TodoProvider } from './context/todoContext'
 import { HabitProvider } from './context/habitContext'
 import { RewardProvider } from './context/rewardContext'
 import DialogWrapper from './components/dialog/DialogWrapper'
+import TodoList from "./components/list/TodoList"
+import HabitList from "./components/list/HabitList"
 
 function App() {
 
@@ -29,11 +31,12 @@ function App() {
                         <Header/>
                         <Status /> 
                         <Routes>
-                            <Route path="/static" element={<Navigate to="/static/todo" />} />
-                            <Route path="/static/todo" element={<TabPanel/>}/>
-                            <Route path="/static/habit" element={<TabPanel/>}/>
-                            <Route path="/static/add/:type" element={<DialogWrapper />} />
-                            <Route path="/static/edit/:type" element={<DialogWrapper />}/>
+                            <Route path="/static" element={<TabPanel />}>
+                                <Route path="todo" element={<TodoList />} />
+                                <Route path="habit" element={<HabitList />} />
+                                <Route path="add/:type" element={<DialogWrapper />} />
+                                <Route path="edit/:type" element={<DialogWrapper />}/>
+                            </Route>
                         </Routes>
                         <AddButton />
                         <Tab /> 

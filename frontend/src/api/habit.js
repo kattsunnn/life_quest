@@ -4,7 +4,7 @@ const BASE_URL = 'http://localhost:8000/habits'
 
 const habitApi = {
     async get(userId) {
-        const res = await axios.get(`${BASE_URL}/?userId=${userId}`);
+        const res = await axios.get(`${BASE_URL}/?user_id=${userId}`);
         return res.data;
     },
     async post(habit) {
@@ -16,7 +16,7 @@ const habitApi = {
         return res.data
     },
     async patch(id, updates) {
-        const res = await axios.put(`${BASE_URL}/${id}/`, updates)
+        const res = await axios.patch(`${BASE_URL}/${id}/`, updates)
         return res.data
     }
 

@@ -12,7 +12,6 @@ const HabitItem = ({ habit, handleEdit }) => {
         const habitUpdates = {
             ...habit,
             isCompleted: checked.checked,
-            updatedAt: new Date().toISOString()
         }
         
         try {

@@ -20,7 +20,7 @@ class TodoAdmin(admin.ModelAdmin):
 
 @admin.register(Habit)
 class HabitAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'user', 'difficulty', 'reward', 'updated_at']
+    list_display = ['id', 'name', 'user', 'difficulty', 'reward', 'is_completed',  'updated_at']
     list_filter = ['difficulty', 'user']
     search_fields = ['name']
     date_hierarchy = 'created_at'

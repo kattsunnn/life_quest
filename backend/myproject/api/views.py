@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
-from .models import User, Todo
+from .models import User, Todo, Habit, Reward
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -191,4 +191,108 @@ def delete_todo(request, pk):
     return JsonResponse(res_data, status=201)
 
 
+class HabitAllView(APIView):
+    def get(self, request):
+        return get_habits(request)
+    def post(self, request):
+        return post_habit(request)
+
+class HabitDetailView(APIView):
+    def patch(self, request, pk):
+        return patch_habit(request, pk)
+    def delete(self, request, pk):
+        return delete_habit(request, pk)
+
+def habit_to_dict(habit):
+    return {
+        'id': habit.id,
+        'user_id': habit.user_id,
+        'name': habit.name,
+        'difficulty': habit.difficulty,
+        'reward': habit.reward,
+        'memo': habit.memo,
+        'is_completed': habit.is_completed,
+        'created_at': habit.created_at.isoformat(),
+        'updated_at': habit.updated_at.isoformat(),
+    }
+
+def get_habits(request):
+    user_id = request.GET.get('user_id')
+    if not user_id:
+        return JsonResponse({'error': 'user_idが指定されていません'}, status=400)
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return JsonResponse({'error': '無効なuser_idです'}, status=400)
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
     
+    habits = Habit.objects.filter(user=user)
+    res_data = { 'habits': [ habit_to_dict(habit) for habit in habits ] }
+    return JsonResponse(res_data)
+
+def post_habit(request):
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': '無効なJSONです'}, status=400)
+    
+    user_id = data.get('user_id')
+    name = data.get('name')
+
+    if not user_id:
+        return JsonResponse({'error': 'user_idが指定されていません'}, status=400)
+    if not name:
+        return JsonResponse({'error': 'nameが指定されていません'}, status=400)
+    
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
+    
+    habit = Habit.objects.create(
+        user=user,
+        name=name,
+        difficulty=data.get('difficulty', 1),
+        reward=data.get('reward', 1),
+        memo=data.get('memo', ''),
+    )
+    res_data = habit_to_dict(habit)
+    return JsonResponse(res_data, status=201)
+
+def patch_habit(request, pk):
+    try:
+        habit = Habit.objects.get(pk=pk)
+    except Habit.DoesNotExist:
+        return JsonResponse({})
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': '無効なJSONです'}, status=400)
+
+    if 'name' in data:
+        habit.name = data['name']
+    if 'difficulty' in data:
+        habit.difficulty = data['difficulty']
+    if 'reward' in data:
+        habit.reward = data['reward']
+    if 'memo' in data:
+        habit.memo = data['memo']
+    if 'is_completed' in data:
+        habit.is_completed = data['is_completed']
+
+    habit.save()
+
+    res_data = habit_to_dict(habit)
+    return JsonResponse(res_data, status=201)
+
+def delete_habit(request, pk):
+    try:
+        habit = Habit.objects.get(pk=pk)
+    except Habit.DoesNotExist:
+        return JsonResponse({'error': 'Habitが見つかりません'}, status=404)
+    res_data = habit_to_dict(habit)
+    habit.delete()
+    return JsonResponse(res_data, status=201)

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react"
 import habitApi from "../api/habit"
-import { v4 as uuidv4 } from 'uuid'
 
 const HabitContext = createContext();
 const HabitDispatchContext = createContext();
@@ -122,7 +121,7 @@ const HabitProvider = ({children}) => {
             dispatch({ type: "habit/add", habit: habitServerToClient(habitData) })
         },
         editHabit: async (id, updates) => {
-            validatehabit(updates)
+            validateHabit(updates)
             const habitData = await habitApi.patch(id, habitClientToServer(updates))
             dispatch({ type: "habit/patch", habit: habitServerToClient(habitData) })
         },
