@@ -59,8 +59,8 @@ const sortHabits = (habits) => {
 }
 
 const validateHabit = (data) => {
-    if (data.hasOwnProperty('name')) {
-        if (!data.name || data.name.trim() === "") {
+    if (data.hasOwnProperty('taskName')) {
+        if (!data.taskName || data.taskName.trim() === "") {
             throw new Error("タスク名を入力してください");
         }
     }
@@ -112,7 +112,7 @@ const HabitProvider = ({children}) => {
 
     const actions = {
         createHabit: async (habit) => {
-            validatehabit(habit)
+            validateHabit(habit)
             const habitToCreate = {
                 userId: userId,
                 ...habit,
@@ -135,9 +135,9 @@ const HabitProvider = ({children}) => {
     return (
         <HabitContext.Provider value={habits}>
             <HabitDispatchContext.Provider value={dispatch}>
-                <HabitActionsContext value={actions}>
+                <HabitActionsContext.Provider value={actions}>
                     {children}
-                </HabitActionsContext>
+                </HabitActionsContext.Provider>
             </HabitDispatchContext.Provider>
         </HabitContext.Provider>
     )

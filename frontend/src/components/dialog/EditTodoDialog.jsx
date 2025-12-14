@@ -63,6 +63,8 @@ const EditTodoDialog = ({editData}) => {
                         >
                         削除
                     </Button>
+                </Dialog.ActionTrigger>
+                <Dialog.ActionTrigger asChild>
                     <Button 
                         bg="green.500"
                         onClick={handleEditTodo}

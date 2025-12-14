@@ -62,7 +62,7 @@ const sortTodos = (todos) => {
 
 const validateTodo = (data) => {
     if (data.hasOwnProperty('taskName')) {
-        if (!data.name || data.name.trim() === "") {
+        if (!data.taskName || data.taskName.trim() === "") {
             throw new Error("タスク名を入力してください");
         }
     }

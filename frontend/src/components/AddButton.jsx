@@ -1,10 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { HStack, Spacer, IconButton } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 
-const AddButton = ({ activeTab }) => {
+const AddButton = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const activeTab =  location.pathname.split("/")[2]
 
     return (
         <>

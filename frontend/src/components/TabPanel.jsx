@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useTodo } from "../context/todoContext"
 import { useHabit } from "../context/habitContext";
 import { Flex } from "@chakra-ui/react";
@@ -8,39 +8,16 @@ import HabitItem from "./Item/HabitItem";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 
-const TabPanel = ({ activeTab }) => {
+const TabPanel = () => {
     
     const navigate = useNavigate();
+    const location = useLocation();
+    const path = location.pathname
     const todos = useTodo();
     const habits = useHabit();
 
     const handleEdit = (data) => {
         navigate(`/static/edit/${activeTab}`, { state: { editData: data } });
-    }
-
-    const renderPanel = () => {
-        switch(activeTab) {
-            case "todo":
-                return todos.map((todo) => (
-                    <TodoItem 
-                        key={todo.id}
-                        todo={todo}
-                        handleEdit={() => handleEdit(todo)}
-                    />))
-            case "habit":
-                return habits.map((habit) => (
-                    <HabitItem 
-                        key={habit.id}
-                        habit={habit}
-                        handleEdit={() => handleEdit(habit)}
-                    />))
-            case "reward":
-                // return rewards.map((reward) => (
-                //         // <Todo name={reward.name} coin={reward.price} />
-                //         ))
-            default:
-                return null
-        }
     }
 
     return (
@@ -56,7 +33,25 @@ const TabPanel = ({ activeTab }) => {
                 align="center"
                 bg="gray.100"
                 >
-               {renderPanel()}
+               {path === "/static/todo" && 
+                    todos.map((todo) => (
+                        <TodoItem 
+                            key={todo.id}
+                            todo={todo}
+                            handleEdit={() => handleEdit(todo)}
+                        />
+                    ))
+                }
+               {path === "/static/habit" && 
+                    habits.map((habit) => (
+                        <HabitItem 
+                            key={habit.id}
+                            habit={habit}
+                            handleEdit={() => handleEdit(habit)}
+                        />
+                    ))
+                }
+
             </Flex>
         </>
     )

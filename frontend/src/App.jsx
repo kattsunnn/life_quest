@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 
 import { Flex } from "@chakra-ui/react"
 import Header from './components/Header'
@@ -15,8 +14,6 @@ import DialogWrapper from './components/dialog/DialogWrapper'
 
 function App() {
 
-    const [ activeTab, setActiveTab ] = useState("todo");
-
     return (
         <>
             <UserProvider>
@@ -31,13 +28,15 @@ function App() {
                         >
                         <Header/>
                         <Status /> 
-                        <TabPanel activeTab={activeTab} />
                         <Routes>
+                            <Route path="/static" element={<Navigate to="/static/todo" />} />
+                            <Route path="/static/todo" element={<TabPanel/>}/>
+                            <Route path="/static/habit" element={<TabPanel/>}/>
                             <Route path="/static/add/:type" element={<DialogWrapper />} />
                             <Route path="/static/edit/:type" element={<DialogWrapper />}/>
                         </Routes>
-                        <AddButton activeTab={activeTab}/>
-                        <Tab activeTab={activeTab} setActiveTab={setActiveTab}/> 
+                        <AddButton />
+                        <Tab /> 
                     </Flex>
                 </Router>
             </RewardProvider>

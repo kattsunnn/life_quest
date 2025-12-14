@@ -1,9 +1,15 @@
-import { Box, Flex, IconButton } from "@chakra-ui/react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
 import TabButton from "./TabButton";
 import { FaCalendarAlt, FaClipboardList, FaGift, FaCog } from "react-icons/fa";
 
-const Tab = ({ activeTab, setActiveTab }) => {
-   return (
+const Tab = () => {
+    
+    const navigate = useNavigate();
+    const location = useLocation();
+    const path =  location.pathname
+
+    return (
         <>
             <Flex
                 width="100%"
@@ -13,23 +19,23 @@ const Tab = ({ activeTab, setActiveTab }) => {
                 bg="green.600">
                 <TabButton 
                     icon={FaCog}
-                    isActive={activeTab === "setting"}
-                    onClick={() => setActiveTab("setting")}
+                    isActive={path === "/static/todo"}
+                    onClick={() => navigate("/static/todo")}
                     />    
                 <TabButton
                     icon={FaCalendarAlt}
-                    isActive={activeTab === "habit"}
-                    onClick={() => setActiveTab("habit")}
+                    isActive={path === "/static/habit"}
+                    onClick={() => navigate("/static/habit")}
                     />    
                 <TabButton
                     icon={FaClipboardList}
-                    isActive={activeTab === "todo"}
-                    onClick={() => setActiveTab("todo")}
+                    isActive={path === "/static/todo"}
+                    onClick={() => navigate("/static/todo")}
                     />    
                 <TabButton
                     icon={FaGift}
-                    isActive={activeTab === "reward"}
-                    onClick={() => setActiveTab("reward")}
+                    isActive={path === "/static/reward"}
+                    onClick={() => navigate("/static/reward")}
                     /> 
             </Flex>
         </>
