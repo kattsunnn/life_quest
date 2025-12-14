@@ -59,8 +59,8 @@ const sortHabits = (habits) => {
 }
 
 const validateHabit = (data) => {
-    if (data.hasOwnProperty('taskName')) {
-        if (!data.taskName || data.taskName.trim() === "") {
+    if (data.hasOwnProperty('name')) {
+        if (!data.name || data.name.trim() === "") {
             throw new Error("タスク名を入力してください");
         }
     }
@@ -75,7 +75,6 @@ const validateHabit = (data) => {
         }
     }
 }
-
 const habitReducer = (habits, action) => {
     let newHabits;
 
@@ -106,32 +105,30 @@ const HabitProvider = ({children}) => {
     const userId = 1;
 
     useEffect(() => {
-        habitApi.get(userId).then(habitData => {
-            dispatch({ type: "habit/init", habit: habitData})
+        habitApi.get(userId).then(data => {
+            dispatch({ type: "habit/init", habit: data.habits.map(habitServerToClient)})
         })
     }, [])
 
     const actions = {
         createHabit: async (habit) => {
-            validateHabit(habit)
+            validatehabit(habit)
             const habitToCreate = {
-                id: uuidv4,
+                userId: userId,
                 ...habit,
                 isCompleted: false,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
             }
-            const habitData = await habitApi.post(habitToCreate)
-            dispatch({ type: "habit/add", habit: habitData })
+            const habitData = await habitApi.post(habitClientToServer(habitToCreate))
+            dispatch({ type: "habit/add", habit: habitServerToClient(habitData) })
         },
         editHabit: async (id, updates) => {
-            validateHabit(updates)
-            const habitData = await habitApi.patch(id, updates)
-            dispatch({ type: "habit/patch", habit: habitData })
+            validatehabit(updates)
+            const habitData = await habitApi.patch(id, habitClientToServer(updates))
+            dispatch({ type: "habit/patch", habit: habitServerToClient(habitData) })
         },
         deleteHabit: async (id) => {
             const habitData = await habitApi.delete(id)
-            dispatch({ type: "habit/delete", habit: habitData })
+            dispatch({ type: "habit/delete", habit: habitServerToClient(habitData) })
         }
     }
 

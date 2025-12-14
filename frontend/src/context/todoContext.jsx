@@ -61,7 +61,7 @@ const sortTodos = (todos) => {
 }
 
 const validateTodo = (data) => {
-    if (data.hasOwnProperty('name')) {
+    if (data.hasOwnProperty('taskName')) {
         if (!data.name || data.name.trim() === "") {
             throw new Error("タスク名を入力してください");
         }
@@ -131,7 +131,6 @@ const TodoProvider = ({children}) => {
         },
         deleteTodo: async (id) => {
             const todoData = await todoApi.delete(id)
-            console.log(todoData)
             dispatch({ type: "todo/delete", todo: todoServerToClient(todoData) })
         }
     }

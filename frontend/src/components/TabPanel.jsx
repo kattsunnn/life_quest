@@ -1,26 +1,21 @@
-import { useState } from "react"
+import { useNavigate } from "react-router-dom";
 import { useTodo } from "../context/todoContext"
 import { useHabit } from "../context/habitContext";
-import { useReward } from "../context/rewardContext";
 import { Flex } from "@chakra-ui/react";
 import TodoItem from "./Item/TodoItem"
 import HabitItem from "./Item/HabitItem";
-import EditDialog from "./dialog/EditDialog";
 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
-const TabPanel = ({ activeTab }) => {
 
+const TabPanel = ({ activeTab }) => {
+    
+    const navigate = useNavigate();
     const todos = useTodo();
     const habits = useHabit();
-    const rewards = useReward();
-
-    const [ isEditOpen, setIsEditOpen ] = useState(false);
-    const [ editData, setEditData ] = useState(null);
 
     const handleEdit = (data) => {
-        setEditData(data);
-        setIsEditOpen(true);
+        navigate(`/static/edit/${activeTab}`, { state: { editData: data } });
     }
 
     const renderPanel = () => {
@@ -62,15 +57,7 @@ const TabPanel = ({ activeTab }) => {
                 bg="gray.100"
                 >
                {renderPanel()}
-                
             </Flex>
-
-            <EditDialog 
-                isEditOpen={isEditOpen}
-                setIsEditOpen={setIsEditOpen}
-                activeTab={activeTab}
-                editData={editData}
-            />
         </>
     )
 }
