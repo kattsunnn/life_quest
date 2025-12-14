@@ -1,11 +1,10 @@
-import { useState } from "react"
-import AddDialog from './dialog/AddDialog'
+import { useNavigate } from "react-router-dom";
 import { HStack, Spacer, IconButton } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa";
 
 const AddButton = ({ activeTab }) => {
 
-    const [ isAddOpen, setIsAddOpen ] = useState(false)
+    const navigate = useNavigate();
 
     return (
         <>
@@ -19,13 +18,11 @@ const AddButton = ({ activeTab }) => {
                     size="xl"
                     rounded="full"
                     bg="green.600"
-                    onClick={() => setIsAddOpen(true)}
+                    onClick={() => navigate(`/add/${activeTab}`)}
                     >
                     <FaPlus />
                 </IconButton>
             </HStack>
-
-            <AddDialog isAddOpen={isAddOpen} setIsAddOpen={setIsAddOpen} activeTab={activeTab}/>
         </>
     )
 }

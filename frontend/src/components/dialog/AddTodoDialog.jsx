@@ -1,43 +1,55 @@
-import { useState, useEffect } from "react" 
-
-import TodoForm from "../form/TodoForm";
+import { useState } from "react" 
 import { useTodoActions } from "../../context/TodoContext";
+import { Button, CloseButton, Dialog } from "@chakra-ui/react"
+import TodoForm from "../form/TodoForm";
 
-const AddTodoDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
+const AddTodoDialog = () => {
     const [ taskName, setTaskName ] = useState("")
     const [ difficulty, setDifficulty ] = useState(1)
     const [ reward, setReward ] = useState(1)
     const [ memo, setMemo ] = useState("")
 
     const { createTodo } = useTodoActions()
-// IDや日付部分もcreatetodoでラップできそう
-    useEffect(() => {
-        if(isSubmit == false) return 
+
+    const handleCreateTodo = async () => {
         const newTodo = {
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,
         }
-        const handleCreateTodo = async (newTodo) => {
-            try {
-                await createTodo(newTodo)
-                setIsAddOpen(false)
-            } catch (error){
-                alert(error.message)
-            } finally {
-                setIsSubmit(false)
-            }
+        try {
+            await createTodo(newTodo)
+        } catch (error){
+            alert(error.message)
         }
-        handleCreateTodo(newTodo)
-        }, [isSubmit])
+    }
 
     return (
-        <TodoForm
-            taskName={taskName} setTaskName={setTaskName}
-            difficulty={difficulty} setDifficulty={setDifficulty}
-            reward={reward} setReward={setReward}
-            memo={memo} setMemo={setMemo}   />
+        <>
+            <Dialog.Header >
+                <Dialog.Title>Todoの作成</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+                <TodoForm
+                    taskName={taskName} setTaskName={setTaskName}
+                    difficulty={difficulty} setDifficulty={setDifficulty}
+                    reward={reward} setReward={setReward}
+                    memo={memo} setMemo={setMemo}   />
+            </Dialog.Body>
+            <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                    <Button variant="outline">キャンセル</Button>
+                </Dialog.ActionTrigger>
+                <Button 
+                    bg="green.500"
+                    onClick={handleCreateTodo}
+                    >作成</Button>
+            </Dialog.Footer>
+            <Dialog.CloseTrigger asChild>
+                <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+        </>
     )
 } 
 

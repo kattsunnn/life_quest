@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import { Flex } from "@chakra-ui/react"
 import Header from './components/Header'
@@ -10,6 +11,7 @@ import { UserProvider } from './context/userContext'
 import { TodoProvider } from './context/todoContext'
 import { HabitProvider } from './context/habitContext'
 import { RewardProvider } from './context/rewardContext'
+import DialogWrapper from './components/dialog/DialogWrapper'
 
 function App() {
 
@@ -21,17 +23,22 @@ function App() {
             <TodoProvider>
             <HabitProvider>
             <RewardProvider>
-                <Flex
-                    width="100vw"
-                    height="100vh"
-                    direction="column"
-                    >
-                    <Header/>
-                    <Status /> 
-                    <TabPanel activeTab={activeTab} />
-                    <AddButton activeTab={activeTab}/>
-                    <Tab activeTab={activeTab} setActiveTab={setActiveTab}/> 
-                </Flex>
+                <Router>
+                    <Flex
+                        width="100vw"
+                        height="100vh"
+                        direction="column"
+                        >
+                        <Header/>
+                        <Status /> 
+                        <TabPanel activeTab={activeTab} />
+                        <Routes>
+                            <Route path="/add/:type" element={<DialogWrapper />} />
+                        </Routes>
+                        <AddButton activeTab={activeTab}/>
+                        <Tab activeTab={activeTab} setActiveTab={setActiveTab}/> 
+                    </Flex>
+                </Router>
             </RewardProvider>
             </HabitProvider>
             </TodoProvider>
