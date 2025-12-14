@@ -41,10 +41,12 @@ const AddTodoDialog = () => {
                 <Dialog.ActionTrigger asChild>
                     <Button variant="outline">キャンセル</Button>
                 </Dialog.ActionTrigger>
-                <Button 
-                    bg="green.500"
-                    onClick={handleCreateTodo}
-                    >作成</Button>
+                <Dialog.ActionTrigger asChild>
+                    <Button 
+                        bg="green.500"
+                        onClick={handleCreateTodo}
+                        >作成</Button>
+                </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
                 <CloseButton size="sm" />

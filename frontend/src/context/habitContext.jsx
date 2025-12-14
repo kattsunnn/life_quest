@@ -6,6 +6,48 @@ const HabitContext = createContext();
 const HabitDispatchContext = createContext();
 const HabitActionsContext = createContext();
 
+function habitServerToClient(habit) {
+    const mapping = {
+        id: "id",
+        user_id: "userId",
+        name: "taskName",
+        difficulty: "difficulty",
+        reward: "reward",
+        memo: "memo",
+        is_completed: "isCompleted",
+        created_at: "createdAt",
+        updated_at: "updatedAt",
+    };
+    const result = {};
+    for (const [serverKey, clientKey] of Object.entries(mapping)) {
+        if (habit[serverKey] !== undefined) {
+            result[clientKey] = habit[serverKey];
+        }
+    }
+    return result;
+}
+
+function habitClientToServer(habit) {
+    const mapping = {
+        id: "id",
+        userId: "user_id",
+        taskName: "name",
+        difficulty: "difficulty",
+        reward: "reward",
+        memo: "memo",
+        isCompleted: "is_completed",
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+    };
+    const result = {};
+    for (const [clientKey, serverKey] of Object.entries(mapping)) {
+        if (habit[clientKey] !== undefined) {
+            result[serverKey] = habit[clientKey];
+        }
+    }
+    return result;
+}
+
 const sortHabits = (habits) => {
     const sorted = [...habits].sort((a, b) => {
         if (a.isCompleted !== b.isCompleted) {

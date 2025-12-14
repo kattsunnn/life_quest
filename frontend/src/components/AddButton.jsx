@@ -18,7 +18,7 @@ const AddButton = ({ activeTab }) => {
                     size="xl"
                     rounded="full"
                     bg="green.600"
-                    onClick={() => navigate(`/add/${activeTab}`)}
+                    onClick={() => navigate(`/static/add/${activeTab}`)}
                     >
                     <FaPlus />
                 </IconButton>

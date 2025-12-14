@@ -33,7 +33,7 @@ function App() {
                         <Status /> 
                         <TabPanel activeTab={activeTab} />
                         <Routes>
-                            <Route path="/add/:type" element={<DialogWrapper />} />
+                            <Route path="/static/add/:type" element={<DialogWrapper />} />
                         </Routes>
                         <AddButton activeTab={activeTab}/>
                         <Tab activeTab={activeTab} setActiveTab={setActiveTab}/> 

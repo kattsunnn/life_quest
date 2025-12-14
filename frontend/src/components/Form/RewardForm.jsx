@@ -1,18 +1,12 @@
 import { VStack } from "@chakra-ui/react"
-import { useState } from "react"
-
 import TaskNameField from "../field/TaskNameField";
 import DifficultyField from "../field/DifficultyField";
 import PriceField from "../field/PriceField";
 import MemoField from "../field/MemoField";
 
-const RewardDialog = ({ isSubmit }) => {
-    const [ taskName, setTaskName ] = useState("")
-    const [ rating, setRating ] = useState(1)
-    const [ price, setPrice ] = useState(0)
-    const [ memo, setMemo ] = useState("")
+const RewardForm = ({ taskName, setTaskName, difficulty, setDifficulty, price, setPrice, memo, setMemo }) => {
     
-    const difficultyReward = {
+    const difficultyPrice = {
         1: 1,    
         2: 2,    
         3: 4,    
@@ -20,20 +14,20 @@ const RewardDialog = ({ isSubmit }) => {
         5: 12   
     }
 
-    const handleRatingChange = (e) => {
-        const newRating = e.value
-        setRating(newRating)
-        setReward(difficultyReward[newRating])
+    const handleDifficultyChange = (e) => {
+        const newDifficulty = e.value
+        setDifficulty(newDifficulty)
+        setPrice(difficultyPrice[newDifficulty])
     }
 
     return (
         <VStack align="start">
             <TaskNameField taskName={taskName} setTaskName={setTaskName}/>
-            <DifficultyField rating={rating} handleRatingChange={handleRatingChange}/>
+            <DifficultyField difficulty={difficulty} handleDifficultyChange={handleDifficultyChange}/>
             <PriceField price={price} setPrice={setPrice}/>
             <MemoField memo={memo} setMemo={setMemo}/>
         </VStack>
     )
 } 
 
-export default RewardDialog
+export default RewardForm

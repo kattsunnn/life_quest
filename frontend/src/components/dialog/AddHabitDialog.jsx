@@ -1,43 +1,55 @@
-import { useState, useEffect } from "react" 
-
-import HabitForm from "../form/HabitForm";
+import { useState } from "react" 
 import { useHabitActions } from "../../context/habitContext";
+import { Button, CloseButton, Dialog } from "@chakra-ui/react"
+import HabitForm from "../Form/HabitForm";
 
-const AddHabitDialog = ({ isSubmit, setIsSubmit, setIsAddOpen}) => {
+const AddHabitDialog = () => {
     const [ taskName, setTaskName ] = useState("")
     const [ difficulty, setDifficulty ] = useState(1)
     const [ reward, setReward ] = useState(1)
     const [ memo, setMemo ] = useState("")
 
     const { createHabit } = useHabitActions()
-// IDや日付部分もcreatetodoでラップできそう
-    useEffect(() => {
-        if(isSubmit == false) return 
+
+    const handleCreateHabit = async () => {
         const newHabit = {
             taskName: taskName,
             difficulty: difficulty,
             reward: reward,
             memo: memo,
         }
-        const handleCreateHabit = async (newHabit) => {
-            try {
-                await createHabit(newHabit)
-                setIsAddOpen(false)
-            } catch (error){
-                alert(error.message)
-            } finally {
-                setIsSubmit(false)
-            }
+        try {
+            await createHabit(newHabit)
+        } catch (error){
+            alert(error.message)
         }
-        handleCreateHabit(newHabit)
-        }, [isSubmit])
+    }
 
     return (
-        <HabitForm
-            taskName={taskName} setTaskName={setTaskName}
-            difficulty={difficulty} setDifficulty={setDifficulty}
-            reward={reward} setReward={setReward}
-            memo={memo} setMemo={setMemo}   />
+        <>
+            <Dialog.Header >
+                <Dialog.Title>習慣の作成</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+                <HabitForm
+                    taskName={taskName} setTaskName={setTaskName}
+                    difficulty={difficulty} setDifficulty={setDifficulty}
+                    reward={reward} setReward={setReward}
+                    memo={memo} setMemo={setMemo}   />
+            </Dialog.Body>
+            <Dialog.Footer>
+                <Dialog.ActionTrigger asChild>
+                    <Button variant="outline">キャンセル</Button>
+                </Dialog.ActionTrigger>
+                <Button 
+                    bg="green.500"
+                    onClick={handleCreateHabit}
+                    >作成</Button>
+            </Dialog.Footer>
+            <Dialog.CloseTrigger asChild>
+                <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
+        </>
     )
 } 
 

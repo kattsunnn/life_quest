@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Dialog, Portal } from "@chakra-ui/react"
 import AddTodoDialog from "./AddTodoDialog";
-// import AddHabitDialog from "./AddHabitDialog";
-// import AddRewardDialog from "./AddRewardDialog"
+import AddHabitDialog from "./AddHabitDialog";
 
 
 const DialogWrapper = () => {
@@ -24,8 +23,7 @@ const DialogWrapper = () => {
                     <Dialog.Positioner>
                         <Dialog.Content >
                             {type === "todo" && <AddTodoDialog />}
-                            {/* {type === "habit" && <AddHabitDialog />}
-                            {type === "reward" && <RewardDialog />} */}
+                            {type === "habit" && <AddHabitDialog />}
                         </Dialog.Content>
                     </Dialog.Positioner>
                 </Portal>
