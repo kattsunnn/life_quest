@@ -7,6 +7,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from .serializers import TodoSerializer
 
 from django.contrib.auth.decorators import login_required
 
@@ -86,12 +87,30 @@ def patch_user(request, pk):
     }
     return JsonResponse(response_data)
 
-
 class TodoAllView(APIView):
     def get(self, request):
-        return get_todos(request)
+        user_id = request.query_params.get("user_id")
+        if not user_id:
+            return Response(
+                {"error": "user_idが指定されていません"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        todos = Todo.objects.filter(user_id=user_id)
+        serializer = TodoGetSerializer(todos, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
-        return post_todo(request)
+        serializer = TodoCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        todo = serializer.save()
+
+        # 作成後のレスポンスは GET用Serializer を使う
+        return Response(
+            TodoGetSerializer(todo).data,
+            status=status.HTTP_201_CREATED
+        )
 
 class TodoDetailView(APIView):
     def patch(self, request, pk):
@@ -111,23 +130,6 @@ def todo_to_dict(todo):
         'created_at': todo.created_at.isoformat(),
         'updated_at': todo.updated_at.isoformat(),
     }
-
-def get_todos(request):
-    user_id = request.GET.get('user_id')
-    if not user_id:
-        return JsonResponse({'error': 'user_idが指定されていません'}, status=400)
-    try:
-        user_id = int(user_id)
-    except ValueError:
-        return JsonResponse({'error': '無効なuser_idです'}, status=400)
-    try:
-        user = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        return JsonResponse({'error': 'ユーザーが見つかりません'}, status=404)
-    
-    todos = Todo.objects.filter(user=user)
-    res_data = { 'todos': [ todo_to_dict(todo) for todo in todos ] }
-    return JsonResponse(res_data)
 
 def post_todo(request):
     try:

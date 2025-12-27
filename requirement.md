@@ -1,8 +1,14 @@
 ## Todo
+- Serializerを導入
+  - todoのViewをきれいにする
+
 - Habitにデータ項目追加
   - 毎週など
 - Rewardを実装
 - 設定を実装
+
+- login周りインフラを整備
+  - ReactRouterとDjangoの競合を防ぐ
 
 - Exp上昇を追加
 - Todoコンポーネント名修正
