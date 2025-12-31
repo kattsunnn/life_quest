@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Todo, Habit
+from .models import User, Todo, Habit, Reward
 
 class UserCreateSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
@@ -141,6 +141,47 @@ class HabitUpdateSerializer(serializers.Serializer):
     saturday = serializers.BooleanField(required=False)
     sunday = serializers.BooleanField(required=False)
     is_completed = serializers.BooleanField(required=False)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+    
+class RewardGetSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    user_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    difficulty = serializers.IntegerField(read_only=True)
+    price = serializers.IntegerField(read_only=True)
+    memo = serializers.CharField(read_only=True)
+    is_purchased = serializers.BooleanField(read_only=True)
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
+
+class RewardCreateSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField() 
+    name = serializers.CharField(max_length=100)
+    difficulty = serializers.IntegerField(default=1)
+    price = serializers.IntegerField(default=1)
+    memo = serializers.CharField(allow_blank=True, required=False)
+
+    def validate_user_id(self, value):
+        if not User.objects.filter(id=value).exists():
+            raise serializers.ValidationError("ユーザーが存在しません")
+        return value
+
+    def create(self, validated_data):
+        user_id = validated_data.pop('user_id')
+        user = User.objects.get(id=user_id)
+        return Reward.objects.create(user=user, **validated_data)
+
+class RewardUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    difficulty = serializers.IntegerField(required=False)
+    price = serializers.IntegerField(required=False)
+    memo = serializers.CharField(required=False, allow_blank=True)
+    is_purchased = serializers.BooleanField(required=False)
 
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():

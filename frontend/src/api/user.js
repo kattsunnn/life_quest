@@ -1,7 +1,7 @@
-// POINT axiosを用いたAPI
+// POINT axios????????????API
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/users'
+const BASE_URL = 'http://127.0.0.1:8000/api/users'
 
 const userApi = {
     async get(id) {

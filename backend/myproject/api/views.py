@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .serializers import UserCreateSerializer, UserGetSerializer, UserUpdateSerializer
 from .serializers import TodoGetSerializer, TodoCreateSerializer, TodoUpdateSerializer
 from .serializers import HabitGetSerializer, HabitCreateSerializer, HabitUpdateSerializer
+from .serializers import RewardGetSerializer, RewardCreateSerializer, RewardUpdateSerializer
 
 from django.contrib.auth.decorators import login_required
 
@@ -142,4 +143,43 @@ class HabitDetailView(APIView):
         habit = get_object_or_404(Habit, pk=habit_id)
         data = HabitGetSerializer(habit).data
         habit.delete()
+        return Response(data, status=status.HTTP_200_OK)
+
+class RewardListView(APIView):
+    def get(self, request, user_id):
+        rewards = Reward.objects.filter(user_id=user_id)
+        serializer = RewardGetSerializer(rewards, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, user_id):
+        data = request.data.copy()
+        data['user_id'] = user_id
+        serializer = RewardCreateSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        habit = serializer.save()
+        return Response(RewardGetSerializer(habit).data, status=status.HTTP_201_CREATED)
+
+class RewardDetailView(APIView):
+    def get(self, request, reward_id):
+        reward = get_object_or_404(Reward, pk=reward_id)
+        return Response(RewardGetSerializer(reward).data, status=status.HTTP_201_CREATED)
+
+    def patch(self, request, reward_id):
+        reward = get_object_or_404(Reward, pk=reward_id)
+        serializer = RewardUpdateSerializer(
+            reward,
+            data=request.data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        reward = serializer.save()
+        return Response(
+            RewardGetSerializer(reward).data, 
+            status=status.HTTP_200_OK
+        )
+    
+    def delete(self, request, reward_id):
+        reward = get_object_or_404(Reward, pk=reward_id)
+        data = RewardGetSerializer(reward).data
+        reward.delete()
         return Response(data, status=status.HTTP_200_OK)

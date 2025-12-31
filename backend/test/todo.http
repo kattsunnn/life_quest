@@ -1,0 +1,40 @@
+@baseUrl = http://localhost:8000/api
+@userId = 4
+
+GET {{baseUrl}}/users/{{userId}}/todos/
+Accept: application/json
+
+###
+POST {{baseUrl}}/users/{{userId}}/todos/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name":"お風呂洗い",
+    "difficulty":3,
+    "reward":7,
+    "memo":"３時までにやる"
+}
+
+
+####
+@todoId = 28
+
+####
+GET {{baseUrl}}/todos/{{todoId}}/
+Accept: application/json
+
+###
+PATCH {{baseUrl}}/todos/{{todoId}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+ "name": "お洗濯"
+}
+
+###
+DELETE {{baseUrl}}/todos/{{todoId}}/
+Accept: application/json
+
+

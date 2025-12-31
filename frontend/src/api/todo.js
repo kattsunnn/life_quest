@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/todos'
+const BASE_URL = 'http://localhost:8000/api/todos'
 
 const todoApi = {
     async get(userId) {

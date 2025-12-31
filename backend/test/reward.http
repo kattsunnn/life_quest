@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:8000/api
+@userId = 4
+
+GET {{baseUrl}}/users/{{userId}}/rewards/
+Accept: application/json
+###
+POST {{baseUrl}}/users/{{userId}}/rewards/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name":"服（５０００円）を買う",
+    "difficulty":4,
+    "reward":8,
+    "memo":""
+}
+
+####
+@habitId = 2
+
+####
+GET {{baseUrl}}/rewards/{{habitId}}/
+Accept: application/json
+
+###
+PATCH {{baseUrl}}/rewards/{{habitId}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+ "reward": 1
+}
+
+###
+DELETE {{baseUrl}}/rewards/{{habitId}}/
+Accept: application/json
+
+

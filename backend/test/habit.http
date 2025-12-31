@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:8000/api
+@userId = 4
+
+GET {{baseUrl}}/users/{{userId}}/habits/
+Accept: application/json
+###
+POST {{baseUrl}}/users/{{userId}}/habits/
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name":"ラジオ体操",
+    "difficulty":1,
+    "reward":1,
+    "memo":"",
+    "monday": "True",
+    "tuseday": "True",
+    "wednesday": "True",
+    "thursday": "True",
+    "friday": "True",
+    "saturday": "True",
+    "sunday": "True"
+}
+
+####
+@habitId = 6
+
+####
+GET {{baseUrl}}/habits/{{habitId}}/
+Accept: application/json
+
+###
+PATCH {{baseUrl}}/habits/{{habitId}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+ "reward": 1
+}
+
+###
+DELETE {{baseUrl}}/habits/{{habitId}}/
+Accept: application/json
+
+

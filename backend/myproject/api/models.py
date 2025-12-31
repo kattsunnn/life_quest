@@ -63,8 +63,10 @@ class Habit(models.Model):
 class Reward(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='rewards')
     name = models.CharField(max_length=100)
-    price = models.IntegerField()
+    difficulty = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    price = models.IntegerField(default=1, validators=[MinValueValidator(1),])
     memo = models.TextField(blank=True, default='')
+    is_purchased = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

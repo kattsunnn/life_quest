@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:8000/api
+
+
+############################################
+### 1. 全ユーザ取得
+############################################
+GET {{baseUrl}}/users/
+Accept: application/json
+
+
+############################################
+### 2. ユーザ新規作成
+############################################
+POST {{baseUrl}}/users/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "shiori"
+}
+
+###
+@userId = 7
+############################################
+### 3. 特定ユーザ取得
+############################################
+GET {{baseUrl}}/users/{{userId}}/
+Accept: application/json
+
+
+############################################
+### 4. ユーザ部分更新（PATCH）
+############################################
+PATCH {{baseUrl}}/users/{{userId}}/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "coins": 200,
+  "level": 5
+}
+
+
+############################################
+### 5. ユーザ削除
+############################################
+DELETE {{baseUrl}}/users/{{userId}}/
+Accept: application/json
