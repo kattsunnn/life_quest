@@ -104,7 +104,7 @@ class HabitGetSerializer(serializers.Serializer):
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 
-class TodoCreateSerializer(serializers.Serializer):
+class HabitCreateSerializer(serializers.Serializer):
     user_id = serializers.IntegerField() 
     name = serializers.CharField(max_length=100)
     difficulty = serializers.IntegerField(default=1)
@@ -127,3 +127,23 @@ class TodoCreateSerializer(serializers.Serializer):
         user_id = validated_data.pop('user_id')
         user = User.objects.get(id=user_id)
         return Habit.objects.create(user=user, **validated_data)
+
+class HabitUpdateSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    difficulty = serializers.IntegerField(required=False)
+    reward = serializers.IntegerField(required=False)
+    memo = serializers.CharField(required=False, allow_blank=True)
+    monday = serializers.BooleanField(required=False)
+    tuseday = serializers.BooleanField(required=False)
+    wednesday = serializers.BooleanField(required=False)
+    thursday = serializers.BooleanField(required=False)
+    friday = serializers.BooleanField(required=False)
+    saturday = serializers.BooleanField(required=False)
+    sunday = serializers.BooleanField(required=False)
+    is_completed = serializers.BooleanField(required=False)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
