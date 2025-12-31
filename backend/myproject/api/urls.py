@@ -1,13 +1,17 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
-from .views import TodoAllView, TodoDetailView, HabitAllView, HabitDetailView
+from .views import UserListView, UserDetailView, TodoListView, TodoDetailView, HabitListView, HabitDetailView, RewardListView, RewardDetailView,
 
 urlpatterns = [
-    path('app/', views.index),
-    path('users/<int:pk>/', views.user),
+    path('users/<int:user_id>/todos/', TodoListView.as_view()),
     path('todos/<int:pk>/', TodoDetailView.as_view()),
-    path('todos/', TodoAllView.as_view()),
+    path('users/<int:user_id>/habits/', HabitListView.as_view()),
     path('habits/<int:pk>/', HabitDetailView.as_view()),
-    path('habits/', HabitAllView.as_view()),
+    path('users/<int:user_id>/rewards/', RewardListView.as_view()),
+    path('rewards/<int:pk>/', RewardDetailView.as_view()),
+    path('users/<int:pk>/', UserDetailView.as_view()),
+    path('users/', UserListView.as_view()),
+
+
 ]
 
