@@ -5,11 +5,12 @@ import { useUserActions } from "../../context/userContext";
 import TodoForm from "../form/TodoForm";
 
 const EditTodoDialog = ({editData}) => {
-    const [ taskName, setTaskName ] = useState(editData.taskName)
-    const [ difficulty, setDifficulty ] = useState(editData.difficulty)
-    const [ reward, setReward ] = useState(editData.reward)
-    const [ memo, setMemo ] = useState(editData.memo)
-
+    const [ todoForm, setTodoForm ] = useState(() => ({
+        taskName:editData.taskNamem,
+        difficulty:editData.difficulty,
+        reward:editData.reward,
+        memo:editData.reward,
+    }))
     const { editTodo, deleteTodo } = useTodoActions()
     const { subCoins } = useUserActions()
 
@@ -25,14 +26,8 @@ const EditTodoDialog = ({editData}) => {
     }
 
     const handleEditTodo = async () => {
-        const todoUpdates = {
-            taskName: taskName,
-            difficulty: difficulty,
-            reward: reward,
-            memo: memo,
-        }
         try {
-            await editTodo(editData.id, todoUpdates)
+            await editTodo(editData.id, todoForm)
         } catch (error){
             alert(error.message)
         } 
@@ -46,11 +41,7 @@ const EditTodoDialog = ({editData}) => {
             <Dialog.Body
                 overflow="auto"
                 >
-                <TodoForm
-                    taskName={taskName} setTaskName={setTaskName}
-                    difficulty={difficulty} setDifficulty={setDifficulty}
-                    reward={reward} setReward={setReward}
-                    memo={memo} setMemo={setMemo}   />
+                <TodoForm todoForm={todoForm} setTodoForm={setTodoForm} />
             </Dialog.Body>
             <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>
