@@ -13,8 +13,7 @@ function todoServerToClient(todo) {
         created_at: "createdAt",
         updated_at: "updatedAt",
     };
-
-    const result = {};
+    const result = { ...todo };
     for (const [serverKey, clientKey] of Object.entries(mapping)) {
         if (todo[serverKey] !== undefined) {
             result[clientKey] = todo[serverKey];
@@ -31,8 +30,7 @@ function todoClientToServer(todo) {
         createdAt: "created_at",
         updatedAt: "updated_at",
     };
-
-    const result = {};
+    const result = { ...todo };
     for (const [clientKey, serverKey] of Object.entries(mapping)) {
         if (todo[clientKey] !== undefined) {
             result[serverKey] = todo[clientKey];
@@ -96,21 +94,19 @@ const todoReducer = (todos, action) => {
 
 const TodoProvider = ({children}) => {
     const [ todos, dispatch ] = useReducer(todoReducer, [])
-    const userId = 1;
+    const userId = 4;
 
     useEffect(() => {
-        todoApi.get(userId).then(data => {
-            dispatch({ type: "todo/init", todos: data.todos.map(todoServerToClient)})
+        todoApi.get(userId).then(todos => {
+            dispatch({ type: "todo/init", todos: todos.map(todo => todoServerToClient(todo))})
         })
     }, [])
 
     const actions = {
         createTodo: async (todo) => {
             validateTodo(todo)
-            const todoToCreate = {
-                ...todo,
-            }
-            const todoData = await todoApi.post(userId, todoClientToServer(todoToCreate))
+            console.log(todoClientToServer(todo))
+            const todoData = await todoApi.post(userId, todoClientToServer(todo))
             dispatch({ type: "todo/add", todo: todoServerToClient(todoData) })
         },
         editTodo: async (todoId, updates) => {

@@ -18,7 +18,7 @@ const userReducer = (user, action) => {
 
 const UserProvider = ({children}) => {
     const [ user, dispatch ] = useReducer(userReducer, [])
-    const userId = 1;
+    const userId = 4;
 
     useEffect(() => {
         userApi.get(userId).then(userData => {

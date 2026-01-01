@@ -6,10 +6,11 @@ import HabitForm from "../Form/HabitForm";
 const AddHabitDialog = () => {
     const [habitForm, setHabitForm] = useState(() => ({
         taskName: "",
-        difficulty: 0,
-        reward: 0,
+        difficulty: 1,
+        reward: 1,
         memo: "",
-        weekdays: {},
+        weekdays: { monday:true, tuesday:true, wednesday:true, 
+                    thursday:true, friday:true, saturday:true, sunday:true},
     }));
     const { createHabit } = useHabitActions()
 

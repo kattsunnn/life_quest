@@ -43,6 +43,7 @@ const HabitItem = ({ habit, handleEdit }) => {
                 colorPalette="green"
                 onClick={(e) => e.stopPropagation()}
                 onCheckedChange={handleCheckboxChange}
+                checked={habit.isCompleted}
                 >
             <Checkbox.HiddenInput />
             <Checkbox.Control />

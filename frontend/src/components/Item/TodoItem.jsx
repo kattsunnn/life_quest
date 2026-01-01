@@ -43,6 +43,7 @@ const TodoItem = ({ todo, handleEdit }) => {
                 colorPalette="green"
                 onClick={(e) => e.stopPropagation()}
                 onCheckedChange={handleCheckboxChange}
+                checked={todo.isCompleted}
                 >
             <Checkbox.HiddenInput />
             <Checkbox.Control />

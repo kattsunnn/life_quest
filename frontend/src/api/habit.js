@@ -16,7 +16,7 @@ const habitApi = {
         return res.data
     },
     async patch(habitId, updates) {
-        const res = await axios.patch(`${BASE_URL}/habits/${habitId}`, updates)
+        const res = await axios.patch(`${BASE_URL}/habits/${habitId}/`, updates)
         return res.data
     }
 }

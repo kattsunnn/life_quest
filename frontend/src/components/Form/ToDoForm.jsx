@@ -15,8 +15,7 @@ const TodoForm = ({ todoForm, setTodoForm }) => {
         5: 12   
     }
 
-    const handleDifficultyChange = (e) => {
-        const newDifficulty = e.value
+    const handleDifficultyChange = (newDifficulty) => {
         setTodoForm(prev => ({
             ...prev,
             difficulty:newDifficulty,

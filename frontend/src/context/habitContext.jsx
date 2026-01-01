@@ -24,7 +24,7 @@ function habitServerToClient(habit) {
         created_at: "createdAt",
         updated_at: "updatedAt",
     };
-    const result = {};
+    const result = { ...habit };
     for (const [serverKey, clientKey] of Object.entries(mapping)) {
         if (habit[serverKey] !== undefined) {
             result[clientKey] = habit[serverKey];
@@ -43,7 +43,7 @@ function habitClientToServer(habit) {
         createdAt: "created_at",
         updatedAt: "updated_at",
     };
-    const result = {};
+    const result = { ...habit };
     for (const [clientKey, serverKey] of Object.entries(mapping)) {
         if (habit[clientKey] !== undefined) {
             result[serverKey] = habit[clientKey];
@@ -88,7 +88,7 @@ const habitReducer = (habits, action) => {
 
     switch (action.type) {
     case "habit/init":
-        return sortHabits(action.habit);
+        return sortHabits(action.habits);
 
     case "habit/add": 
         newHabits = [...habits, action.habit];
@@ -110,11 +110,11 @@ const habitReducer = (habits, action) => {
 
 const HabitProvider = ({children}) => {
     const [ habits, dispatch ] = useReducer(habitReducer, [])
-    const userId = 1;
+    const userId = 4;
 
     useEffect(() => {
-        habitApi.get(userId).then(data => {
-            dispatch({ type: "habit/init", habit: data.habits.map(habitServerToClient)})
+        habitApi.get(userId).then(habits => {
+            dispatch({ type: "habit/init", habits: habits.map(habit => habitServerToClient(habit))})
         })
     }, [])
 

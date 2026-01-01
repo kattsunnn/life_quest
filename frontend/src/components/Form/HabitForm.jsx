@@ -7,7 +7,6 @@ import FrequencyField from "../field/FrequencyField";
 import MemoField from "../field/MemoField";
 
 const HabitForm = ({ habitForm, setHabitForm }) => {
-    
     const difficultyReward = {
         1: 1,    
         2: 2,    
@@ -16,8 +15,7 @@ const HabitForm = ({ habitForm, setHabitForm }) => {
         5: 12   
     }
 
-    const handleDifficultyChange = (e) => {
-        const newDifficulty = e.value
+    const handleDifficultyChange = (newDifficulty) => {
         setHabitForm(prev => ({
             ...prev,
             difficulty: newDifficulty,
@@ -39,7 +37,7 @@ const HabitForm = ({ habitForm, setHabitForm }) => {
                 onChange={(value) => updateField("taskName", value)}
             />
             <DifficultyField 
-                value={habitForm.difficulty}
+                difficulty={habitForm.difficulty}
                 onChange={handleDifficultyChange}/>
             <RewardField
                 reward={habitForm.reward}

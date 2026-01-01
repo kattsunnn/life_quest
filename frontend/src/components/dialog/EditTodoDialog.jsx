@@ -6,10 +6,10 @@ import TodoForm from "../form/TodoForm";
 
 const EditTodoDialog = ({editData}) => {
     const [ todoForm, setTodoForm ] = useState(() => ({
-        taskName:editData.taskNamem,
+        taskName:editData.taskName,
         difficulty:editData.difficulty,
         reward:editData.reward,
-        memo:editData.reward,
+        memo:editData.memo,
     }))
     const { editTodo, deleteTodo } = useTodoActions()
     const { subCoins } = useUserActions()
