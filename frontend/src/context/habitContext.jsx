@@ -5,14 +5,21 @@ const HabitContext = createContext();
 const HabitDispatchContext = createContext();
 const HabitActionsContext = createContext();
 
+
+
+function extractWeekdays(habit) {
+    const DAYS = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+
+    return DAYS.reduce((acc, day) => {
+        acc[day] = Boolean(habit[day]);
+        return acc;
+    }, {});
+}
+
 function habitServerToClient(habit) {
     const mapping = {
-        id: "id",
         user_id: "userId",
         name: "taskName",
-        difficulty: "difficulty",
-        reward: "reward",
-        memo: "memo",
         is_completed: "isCompleted",
         created_at: "createdAt",
         updated_at: "updatedAt",
@@ -23,17 +30,15 @@ function habitServerToClient(habit) {
             result[clientKey] = habit[serverKey];
         }
     }
+    result.weekdays = extractWeekdays(habit);
+
     return result;
 }
 
 function habitClientToServer(habit) {
     const mapping = {
-        id: "id",
         userId: "user_id",
         taskName: "name",
-        difficulty: "difficulty",
-        reward: "reward",
-        memo: "memo",
         isCompleted: "is_completed",
         createdAt: "created_at",
         updatedAt: "updated_at",
@@ -44,6 +49,10 @@ function habitClientToServer(habit) {
             result[serverKey] = habit[clientKey];
         }
     }
+    if (habit.weekdays) {
+        Object.assign(result, habit.weekdays);
+    }
+
     return result;
 }
 
@@ -112,21 +121,16 @@ const HabitProvider = ({children}) => {
     const actions = {
         createHabit: async (habit) => {
             validateHabit(habit)
-            const habitToCreate = {
-                userId: userId,
-                ...habit,
-                isCompleted: false,
-            }
-            const habitData = await habitApi.post(habitClientToServer(habitToCreate))
-            dispatch({ type: "habit/add", habit: habitServerToClient(habitData) })
+            const habitRes = await habitApi.post(userId, habitClientToServer(habit))
+            dispatch({ type: "habit/add", habit: habitServerToClient(habitRes) })
         },
-        editHabit: async (id, updates) => {
+        editHabit: async (habitId, updates) => {
             validateHabit(updates)
-            const habitData = await habitApi.patch(id, habitClientToServer(updates))
-            dispatch({ type: "habit/patch", habit: habitServerToClient(habitData) })
+            const habitRes = await habitApi.patch(habitId, habitClientToServer(updates))
+            dispatch({ type: "habit/patch", habit: habitServerToClient(habitRes) })
         },
-        deleteHabit: async (id) => {
-            const habitData = await habitApi.delete(id)
+        deleteHabit: async (habitId) => {
+            const habitData = await habitApi.delete(habitId)
             dispatch({ type: "habit/delete", habit: habitServerToClient(habitData) })
         }
     }

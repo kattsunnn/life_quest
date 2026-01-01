@@ -1,6 +1,6 @@
 import { Field, Textarea } from "@chakra-ui/react"
 
-const MemoField = ({ memo, setMemo }) => {
+const MemoField = ({ memo, onChange }) => {
     
     return (
         <Field.Root >
@@ -9,7 +9,7 @@ const MemoField = ({ memo, setMemo }) => {
                 variant="subtle"
                 value={memo}
                 autoresize
-                onChange={(e) => setMemo(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 />
         </Field.Root>
     )

@@ -5,11 +5,14 @@ import { useUserActions } from "../../context/userContext";
 import HabitForm from "../Form/HabitForm";
 
 const EditHabitDialog = ({editData}) => {
-    const [ taskName, setTaskName ] = useState(editData.taskName)
-    const [ difficulty, setDifficulty ] = useState(editData.difficulty)
-    const [ reward, setReward ] = useState(editData.reward)
-    const [ memo, setMemo ] = useState(editData.memo)
 
+    const [habitForm, setHabitForm] = useState(() => ({
+    taskName: editData.taskName,
+    difficulty: editData.difficulty,
+    reward: editData.reward,
+    memo: editData.memo,
+    weekdays: { ...editData.weekdays },
+    }));
     const { editHabit, deleteHabit } = useHabitActions()
     const { subCoins } = useUserActions()
 
@@ -25,14 +28,8 @@ const EditHabitDialog = ({editData}) => {
     }
 
     const handleEditHabit = async () => {
-        const habitUpdates = {
-            taskName: taskName,
-            difficulty: difficulty,
-            reward: reward,
-            memo: memo,
-        }
         try {
-            await editHabit(editData.id, habitUpdates)
+            await editHabit(editData.id, habitForm)
         } catch (error){
             alert(error.message)
         } 
@@ -46,11 +43,7 @@ const EditHabitDialog = ({editData}) => {
             <Dialog.Body
                 overflow="auto"
                 >
-                <HabitForm
-                    taskName={taskName} setTaskName={setTaskName}
-                    difficulty={difficulty} setDifficulty={setDifficulty}
-                    reward={reward} setReward={setReward}
-                    memo={memo} setMemo={setMemo}   />
+                <HabitForm habitForm={habitForm} setHabitForm={setHabitForm}/>
             </Dialog.Body>
             <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>

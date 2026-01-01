@@ -4,22 +4,18 @@ import { Button, CloseButton, Dialog } from "@chakra-ui/react"
 import HabitForm from "../Form/HabitForm";
 
 const AddHabitDialog = () => {
-    const [ taskName, setTaskName ] = useState("")
-    const [ difficulty, setDifficulty ] = useState(1)
-    const [ reward, setReward ] = useState(1)
-    const [ memo, setMemo ] = useState("")
-
+    const [habitForm, setHabitForm] = useState(() => ({
+        taskName: "",
+        difficulty: 0,
+        reward: 0,
+        memo: "",
+        weekdays: {},
+    }));
     const { createHabit } = useHabitActions()
 
     const handleCreateHabit = async () => {
-        const newHabit = {
-            taskName: taskName,
-            difficulty: difficulty,
-            reward: reward,
-            memo: memo,
-        }
         try {
-            await createHabit(newHabit)
+            await createHabit(habitForm)
         } catch (error){
             alert(error.message)
         }
@@ -31,11 +27,7 @@ const AddHabitDialog = () => {
                 <Dialog.Title>習慣の作成</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-                <HabitForm
-                    taskName={taskName} setTaskName={setTaskName}
-                    difficulty={difficulty} setDifficulty={setDifficulty}
-                    reward={reward} setReward={setReward}
-                    memo={memo} setMemo={setMemo}   />
+                <HabitForm habitForm={habitForm} setHabitForm={setHabitForm}   />
             </Dialog.Body>
             <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>

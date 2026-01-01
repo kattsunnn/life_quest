@@ -4,22 +4,17 @@ import { Button, CloseButton, Dialog } from "@chakra-ui/react"
 import TodoForm from "../form/TodoForm";
 
 const AddTodoDialog = () => {
-    const [ taskName, setTaskName ] = useState("")
-    const [ difficulty, setDifficulty ] = useState(1)
-    const [ reward, setReward ] = useState(1)
-    const [ memo, setMemo ] = useState("")
-
+    const [ todoForm, setTodoForm ] = useState(() => ({
+        taskName:"",
+        difficulty:1,
+        reward:1,
+        memo:""
+    }))
     const { createTodo } = useTodoActions()
 
     const handleCreateTodo = async () => {
-        const newTodo = {
-            taskName: taskName,
-            difficulty: difficulty,
-            reward: reward,
-            memo: memo,
-        }
         try {
-            await createTodo(newTodo)
+            await createTodo(todoForm)
         } catch (error){
             alert(error.message)
         }
@@ -31,11 +26,7 @@ const AddTodoDialog = () => {
                 <Dialog.Title>Todoの作成</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-                <TodoForm
-                    taskName={taskName} setTaskName={setTaskName}
-                    difficulty={difficulty} setDifficulty={setDifficulty}
-                    reward={reward} setReward={setReward}
-                    memo={memo} setMemo={setMemo}   />
+                <TodoForm todoForm={todoForm} setTodoForm={setTodoForm}  />
             </Dialog.Body>
             <Dialog.Footer>
                 <Dialog.ActionTrigger asChild>

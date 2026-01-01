@@ -1,6 +1,6 @@
 import { Field, RatingGroup } from "@chakra-ui/react"
 
-const DifficultyField = ({ difficulty, handleDifficultyChange }) => {
+const DifficultyField = ({ difficulty, onChange }) => {
 
     const difficultyText = {
         1: "非常に簡単",
@@ -15,7 +15,7 @@ const DifficultyField = ({ difficulty, handleDifficultyChange }) => {
             <Field.Label>難易度： {difficultyText[difficulty]}</Field.Label>
             <RatingGroup.Root
                 value={difficulty} 
-                onValueChange={handleDifficultyChange}
+                onValueChange={(e) => onChange(e.value)}
                 size="lg" colorPalette="red">
                 <RatingGroup.HiddenInput />
                 <RatingGroup.Control />

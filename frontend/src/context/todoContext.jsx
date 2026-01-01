@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react"
 import todoApi from "../api/todo"
-import { v4 as uuidv4 } from 'uuid'
 
 const TodoContext = createContext();
 const TodoDispatchContext = createContext();
@@ -8,12 +7,8 @@ const TodoActionsContext = createContext();
 
 function todoServerToClient(todo) {
     const mapping = {
-        id: "id",
         user_id: "userId",
         name: "taskName",
-        difficulty: "difficulty",
-        reward: "reward",
-        memo: "memo",
         is_completed: "isCompleted",
         created_at: "createdAt",
         updated_at: "updatedAt",
@@ -30,12 +25,8 @@ function todoServerToClient(todo) {
 
 function todoClientToServer(todo) {
     const mapping = {
-        id: "id",
         userId: "user_id",
         taskName: "name",
-        difficulty: "difficulty",
-        reward: "reward",
-        memo: "memo",
         isCompleted: "is_completed",
         createdAt: "created_at",
         updatedAt: "updated_at",
@@ -117,20 +108,18 @@ const TodoProvider = ({children}) => {
         createTodo: async (todo) => {
             validateTodo(todo)
             const todoToCreate = {
-                userId: userId,
                 ...todo,
-                isCompleted: false,
             }
-            const todoData = await todoApi.post(todoClientToServer(todoToCreate))
+            const todoData = await todoApi.post(userId, todoClientToServer(todoToCreate))
             dispatch({ type: "todo/add", todo: todoServerToClient(todoData) })
         },
-        editTodo: async (id, updates) => {
+        editTodo: async (todoId, updates) => {
             validateTodo(updates)
-            const todoData = await todoApi.patch(id, todoClientToServer(updates))
+            const todoData = await todoApi.patch(todoId, todoClientToServer(updates))
             dispatch({ type: "todo/patch", todo: todoServerToClient(todoData) })
         },
-        deleteTodo: async (id) => {
-            const todoData = await todoApi.delete(id)
+        deleteTodo: async (todoId) => {
+            const todoData = await todoApi.delete(todoId)
             dispatch({ type: "todo/delete", todo: todoServerToClient(todoData) })
         }
     }

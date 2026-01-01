@@ -1,31 +1,37 @@
 import { useState } from "react" 
 import { Wrap, Button } from "@chakra-ui/react";
 
-const WeekdaySelector = () => {
+const WeekdaySelector = ({weekdays, onChange}) => {
 
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"]
+    const WEEKDAYS = [
+        { label: "日", key: "sunday" },
+        { label: "月", key: "monday" },
+        { label: "火", key: "tuesday" },
+        { label: "水", key: "wednesday" },
+        { label: "木", key: "thursday" },
+        { label: "金", key: "friday" },
+        { label: "土", key: "saturday" },
+    ];
 
-    const [selected, setSelected] = useState([]);
-
-    const toggleDay = (day) => {
-        setSelected((prev) =>
-        prev.includes(day)
-            ? prev.filter((d) => d !== day)
-            : [...prev, day]
-        );
+    const toggleDay = (key) => {
+        onChange({
+        ...weekdays,
+        [key]: !weekdays[key],
+        });
     };
+
     return (
         <Wrap width="100%" justify="space-around">
-        {weekdays.map((day) => (
+        {WEEKDAYS.map(({label, key}) => (
             <Button
-            key={day}
+            key={key}
             size="sm"
             rounded="full"
             colorPalette="green"
-            variant={selected.includes(day) ? "solid" : "outline"}
-            onClick={() => toggleDay(day)}
+            variant={weekdays[key] ? "solid" : "outline"}
+            onClick={() => toggleDay(key)}
             >
-            {day}
+            {label}
             </Button>
         ))}
         </Wrap>

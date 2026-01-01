@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Field, VStack, SegmentGroup } from "@chakra-ui/react"
 import WeekdaySelector from "./WeekdaySelector"
 
-const FrequencyField = () => {
+const FrequencyField = ({weekdays, onChange}) => {
 
     const [ frequency, setFrequency ] = useState("毎日")
 
@@ -21,7 +21,7 @@ const FrequencyField = () => {
                     <SegmentGroup.Indicator />
                     <SegmentGroup.Items items={["毎日", "毎週"]} />
                 </SegmentGroup.Root>
-                {frequency === "毎週" && <WeekdaySelector />}
+                {frequency === "毎週" && <WeekdaySelector weekdays={weekdays} onChage={onChage}/>}
             </VStack>
         </Field.Root>
     )

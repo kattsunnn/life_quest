@@ -1,7 +1,7 @@
 import { Field, HStack, NumberInput } from "@chakra-ui/react"
 import { FaCoins } from "react-icons/fa";
 
-const RewardField = ({ reward, setReward }) => {
+const RewardField = ({ reward, onChange }) => {
 
     return (
 
@@ -12,7 +12,7 @@ const RewardField = ({ reward, setReward }) => {
                 <NumberInput.Root 
                     min={1}
                     value={reward}
-                    onValueChange={(e) => setReward(e.valueAsNumber)}
+                    onValueChange={(e) => onChange(e.valueAsNumber)}
                     width="200px">
                     <NumberInput.Control />
                     <NumberInput.Input />

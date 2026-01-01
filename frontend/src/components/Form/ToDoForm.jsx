@@ -5,7 +5,7 @@ import DifficultyField from "../field/DifficultyField";
 import RewardField from "../field/RewardField";
 import MemoField from "../field/MemoField";
 
-const TodoForm = ({ taskName, setTaskName, difficulty, setDifficulty, reward, setReward, memo, setMemo }) => {
+const TodoForm = ({ todoForm, setTodoForm }) => {
     
     const difficultyReward = {
         1: 1,    
@@ -15,20 +15,30 @@ const TodoForm = ({ taskName, setTaskName, difficulty, setDifficulty, reward, se
         5: 12   
     }
 
-    const handleRatingChange = (e) => {
+    const handleDifficultyChange = (e) => {
         const newDifficulty = e.value
-        setDifficulty(newDifficulty)
-        setReward(difficultyReward[newDifficulty])
+        setTodoForm(prev => ({
+            ...prev,
+            difficulty:newDifficulty,
+            reward:difficultyReward[newDifficulty],
+        }))
     }
+
+    const updateField = (field, value) => {
+        setTodoForm(prev => ({
+        ...prev,
+        [field]: value,
+        }));
+    };
 
     return (
         <VStack 
             align="start"
             >
-            <TaskNameField taskName={taskName} setTaskName={setTaskName}/>
-            <DifficultyField difficulty={difficulty} handleDifficultyChange={handleRatingChange}/>
-            <RewardField reward={reward} setReward={setReward}/>
-            <MemoField memo={memo} setMemo={setMemo}/>
+            <TaskNameField taskName={todoForm.taskName} onChange={(value) => {updateField("taskName", value)}}/>
+            <DifficultyField difficulty={todoForm.difficulty} onChange={handleDifficultyChange}/>
+            <RewardField reward={todoForm.reward} onChange={(value) => {updateField("reward", value)}}/>
+            <MemoField memo={todoForm.memo} onChange={(value) => {updateField("memo", value)}}/>
         </VStack>
     )
 } 

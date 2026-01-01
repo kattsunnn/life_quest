@@ -1,6 +1,6 @@
 import { Field, Input } from "@chakra-ui/react"
 
-const TaskNameField = ({ taskName, setTaskName }) => {
+const TaskNameField = ({ taskName, onChange }) => {
     
     return (
         <Field.Root >
@@ -8,7 +8,7 @@ const TaskNameField = ({ taskName, setTaskName }) => {
             <Input 
                 variant="subtle"
                 value={taskName}
-                onChange={(e) => setTaskName(e.target.value)}
+                onChange={(e) => onChange(e.target.value)}
                 />
         </Field.Root>
     )

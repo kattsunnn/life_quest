@@ -1,22 +1,22 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api/todos'
+const BASE_URL = 'http://localhost:8000/api'
 
 const todoApi = {
     async get(userId) {
-        const res = await axios.get(`${BASE_URL}/?user_id=${userId}`);
+        const res = await axios.get(`${BASE_URL}/users/${userId}/todos/`);
         return res.data;
     },
-    async post(todo) {
-        const res = await axios.post(`${BASE_URL}/`, todo);
+    async post(userId, todo) {
+        const res = await axios.post(`${BASE_URL}/users/${userId}/todos/`, todo);
         return res.data
     },
-    async delete(id) {
-        const res = await axios.delete(`${BASE_URL}/${id}/`)
+    async delete(todoId) {
+        const res = await axios.delete(`${BASE_URL}/todos/${todoId}/`)
         return res.data
     },
-    async patch(id, updates) {
-        const res = await axios.patch(`${BASE_URL}/${id}/`, updates)
+    async patch(todoId, updates) {
+        const res = await axios.patch(`${BASE_URL}/todos/${todoId}/`, updates)
         return res.data
     }
 

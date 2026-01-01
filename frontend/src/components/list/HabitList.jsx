@@ -7,8 +7,8 @@ const HabitList = () => {
     const habits = useHabit();
     const navigate = useNavigate();
     
-    const handleEdit = (data) => {
-        navigate(`/static/edit/habit`, { state: { editData: data } });
+    const handleEdit = (habit) => {
+        navigate(`/static/edit/habit`, { state: { editData: habit } });
     }
 
     return (

@@ -11,20 +11,6 @@ const userReducer = (user, action) => {
       return action.user;
     case "user/patch":
       return action.user;
-    // case "user/add/coin":
-    //   return {...user, coins: user.coins + action.amount };
-    // case "user/sub/coin":
-    //   return {...user, coins: user.coins - action.amount };
-    // case "user/add/level":
-    //   return {...user, level: user.level + action.amount };
-    // case "user/add/exp":
-    //   return {...user, exp: user.exp + action.amount };
-    // case "user/add/ticket":
-    //   return {  ...user,
-    //             tickets: { ...user.tickets, [action.ticketType]: user.tikets[action.ticketType] + action.amount } };    
-    // case "user/sub/ticket":
-    //   return {  ...user,
-    //             tickets: { ...user.tickets, [action.ticketType]: user.tikets[action.ticketType] - action.amount } };
     default:
       return user;
   }
@@ -42,12 +28,12 @@ const UserProvider = ({children}) => {
 
     const actions = {
       addCoins: async (amount) => {
-        const userData = await userApi.patch(user.id, {coins: user.coins + amount})
+        const userData = await userApi.patch(userId, {coins: user.coins + amount})
         dispatch({ type: "user/patch", user: userData })
       },
 
       subCoins: async (amount) => {
-        const userData = await userApi.patch(user.id, {coins: user.coins - amount})
+        const userData = await userApi.patch(userId, {coins: user.coins - amount})
         dispatch({ type: "user/patch", user: userData })
       }
     }

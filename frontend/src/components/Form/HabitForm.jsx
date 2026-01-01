@@ -6,7 +6,7 @@ import RewardField from "../field/RewardField";
 import FrequencyField from "../field/FrequencyField";
 import MemoField from "../field/MemoField";
 
-const HabitForm = ({ taskName, setTaskName, difficulty, setDifficulty, reward, setReward, memo, setMemo }) => {
+const HabitForm = ({ habitForm, setHabitForm }) => {
     
     const difficultyReward = {
         1: 1,    
@@ -18,17 +18,41 @@ const HabitForm = ({ taskName, setTaskName, difficulty, setDifficulty, reward, s
 
     const handleDifficultyChange = (e) => {
         const newDifficulty = e.value
-        setDifficulty(newDifficulty)
-        setReward(difficultyReward[newDifficulty])
+        setHabitForm(prev => ({
+            ...prev,
+            difficulty: newDifficulty,
+            reward: difficultyReward[newDifficulty],
+        }));
     }
+    
+    const updateField = (field, value) => {
+        setHabitForm(prev => ({
+        ...prev,
+        [field]: value,
+        }));
+    };
 
     return (
         <VStack align="start">
-            <TaskNameField taskName={taskName} setTaskName={setTaskName}/>
-            <DifficultyField difficulty={difficulty} handleDifficultyChange={handleDifficultyChange}/>
-            <RewardField reward={reward} setReward={setReward}/>
-            <FrequencyField />
-            <MemoField memo={memo} setMemo={setMemo}/>
+            <TaskNameField
+                taskName={habitForm.taskName}
+                onChange={(value) => updateField("taskName", value)}
+            />
+            <DifficultyField 
+                value={habitForm.difficulty}
+                onChange={handleDifficultyChange}/>
+            <RewardField
+                reward={habitForm.reward}
+                onChange={(value) => updateField("reward", value)}
+            />
+            <FrequencyField
+                weekdays={habitForm.weekdays}
+                onChange={(value) => updateField("weekdays", value)}
+            />
+            <MemoField
+                memo={habitForm.memo}
+                onChange={(value) => updateField("memo", value)}
+            />
         </VStack>
     )
 } 

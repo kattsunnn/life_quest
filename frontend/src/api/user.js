@@ -1,15 +1,15 @@
 // POINT axios????????????API
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/users'
+const BASE_URL = 'http://127.0.0.1:8000/api'
 
 const userApi = {
-    async get(id) {
-        const res = await axios.get(`${BASE_URL}/${id}/`);
+    async get(userId) {
+        const res = await axios.get(`${BASE_URL}/users/${userId}/`);
         return res.data;
     },
-    async patch(id, updates) {
-        const res = await axios.patch(`${BASE_URL}/${id}/`, updates);
+    async patch(userId, updates) {
+        const res = await axios.patch(`${BASE_URL}/users/${userId}/`, updates);
         return res.data
     }
 }

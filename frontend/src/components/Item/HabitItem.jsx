@@ -10,10 +10,8 @@ const HabitItem = ({ habit, handleEdit }) => {
 
     const handleCheckboxChange = async (checked) => {
         const habitUpdates = {
-            ...habit,
             isCompleted: checked.checked,
         }
-        
         try {
             await editHabit(habit.id, habitUpdates)
             if(checked.checked){
