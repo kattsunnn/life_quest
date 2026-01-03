@@ -1,10 +1,10 @@
 import { VStack } from "@chakra-ui/react"
 import TaskNameField from "../field/TaskNameField";
 import DifficultyField from "../field/DifficultyField";
-import PriceField from "../field/PriceField";
+import RewardField from "../field/RewardField";
 import MemoField from "../field/MemoField";
 
-const RewardForm = ({ taskName, setTaskName, difficulty, setDifficulty, price, setPrice, memo, setMemo }) => {
+const RewardForm = ({ rewardForm, setRewardForm }) => {
     
     const difficultyPrice = {
         1: 1,    
@@ -14,18 +14,29 @@ const RewardForm = ({ taskName, setTaskName, difficulty, setDifficulty, price, s
         5: 12   
     }
 
-    const handleDifficultyChange = (e) => {
-        const newDifficulty = e.value
-        setDifficulty(newDifficulty)
-        setPrice(difficultyPrice[newDifficulty])
+    const handleDifficultyChange = (newDifficulty) => {
+        setRewardForm(prev => ({
+            ...prev,
+            difficulty:newDifficulty,
+            price:difficultyPrice[newDifficulty],
+        }))
     }
 
+    const updateField = (field, value) => {
+        setRewardForm(prev => ({
+        ...prev,
+        [field]: value,
+        }));
+    };
+
     return (
-        <VStack align="start">
-            <TaskNameField taskName={taskName} setTaskName={setTaskName}/>
-            <DifficultyField difficulty={difficulty} handleDifficultyChange={handleDifficultyChange}/>
-            <PriceField price={price} setPrice={setPrice}/>
-            <MemoField memo={memo} setMemo={setMemo}/>
+        <VStack 
+            align="start"
+            >
+            <TaskNameField taskName={rewardForm.name} onChange={(value) => {updateField("name", value)}}/>
+            <DifficultyField difficulty={rewardForm.difficulty} onChange={handleDifficultyChange}/>
+            <RewardField reward={rewardForm.price} onChange={(value) => {updateField("price", value)}}/>
+            <MemoField memo={rewardForm.memo} onChange={(value) => {updateField("memo", value)}}/>
         </VStack>
     )
 } 

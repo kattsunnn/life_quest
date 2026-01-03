@@ -2,9 +2,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, Portal } from "@chakra-ui/react"
 import AddTodoDialog from "./AddTodoDialog";
 import AddHabitDialog from "./AddHabitDialog";
+import AddRewardDialog from "./AddRewardDialog";
 import EditTodoDialog from "./EditTodoDialog";
 import EditHabitDialog from "./EditHabitDialog";
-
+import EditRewardDialog from "./EditRewardDialog";
 
 const DialogWrapper = () => {
     const navigate = useNavigate();
@@ -30,6 +31,8 @@ const DialogWrapper = () => {
                             {path === "/static/edit/todo" && <EditTodoDialog editData={editData}/>}
                             {path === "/static/add/habit" && <AddHabitDialog />}
                             {path === "/static/edit/habit" && <EditHabitDialog editData={editData}/>}
+                            {path === "/static/add/reward" && <AddRewardDialog />}
+                            {path === "/static/edit/reward" && <EditRewardDialog editData={editData}/>}
                         </Dialog.Content>
                     </Dialog.Positioner>
                 </Portal>

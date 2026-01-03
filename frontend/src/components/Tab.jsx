@@ -19,8 +19,8 @@ const Tab = () => {
                 bg="green.600">
                 <TabButton 
                     icon={FaCog}
-                    isActive={path === "/static/todo"}
-                    onClick={() => navigate("/static/todo")}
+                    isActive={path === "/static/setting"}
+                    onClick={() => navigate("/static/setting")}
                     />    
                 <TabButton
                     icon={FaCalendarAlt}

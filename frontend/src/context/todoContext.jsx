@@ -105,7 +105,6 @@ const TodoProvider = ({children}) => {
     const actions = {
         createTodo: async (todo) => {
             validateTodo(todo)
-            console.log(todoClientToServer(todo))
             const todoData = await todoApi.post(userId, todoClientToServer(todo))
             dispatch({ type: "todo/add", todo: todoServerToClient(todoData) })
         },
@@ -132,8 +131,8 @@ const TodoProvider = ({children}) => {
 }
 
 const useTodo = () => useContext(TodoContext)
-const useDispatchtodo = () => useContext(TodoDispatchContext)
+const useDispatchTodo = () => useContext(TodoDispatchContext)
 const useTodoActions = () => useContext(TodoActionsContext)
 
-export { useTodo, useDispatchtodo, useTodoActions, TodoProvider };
+export { useTodo, useDispatchTodo, useTodoActions, TodoProvider };
 

@@ -13,6 +13,8 @@ import { RewardProvider } from './context/rewardContext'
 import DialogWrapper from './components/dialog/DialogWrapper'
 import TodoList from "./components/list/TodoList"
 import HabitList from "./components/list/HabitList"
+import RewardList from "./components/list/RewardList"
+import PriceButton from "./components/PriceButton"
 
 function App() {
 
@@ -34,6 +36,7 @@ function App() {
                             <Route path="/static" element={<TabPanel />}>
                                 <Route path="todo" element={<TodoList />} />
                                 <Route path="habit" element={<HabitList />} />
+                                <Route path="reward" element={<RewardList />}/>
                                 <Route path="add/:type" element={<DialogWrapper />} />
                                 <Route path="edit/:type" element={<DialogWrapper />}/>
                             </Route>
