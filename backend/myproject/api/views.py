@@ -63,8 +63,9 @@ class UserDetailView(APIView):
 
     def delete(self, request, user_id):
         user = get_object_or_404(User, pk=user_id)
+        data = UserGetSerializer(user).data
         user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data, status=status.HTTP_200_OK)
     
 class TodoListView(APIView):
     def get(self, request, user_id):

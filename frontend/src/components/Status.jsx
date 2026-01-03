@@ -11,6 +11,13 @@ const Status = () => {
     if ( Array.isArray(userData) || Object.keys(userData).length === 0 ) {
         return <></>
     }
+    const DIFFICULTY_COLOR_MAP = {
+        1: "khaki",
+        2: "peru",
+        3: "silver",
+        4: "gold",
+        5: "turquoise",
+    }
 
     return (
         <>
@@ -30,10 +37,11 @@ const Status = () => {
                     <ExpBar userLevel={userData.level} userExp={userData.exp}/>
                     <ItemIcon icon={FaCoins} color="gold" count={userData.coins} />
                     <HStack gap="3">
-                        <ItemIcon icon={FaTicketAlt} color="peru" count={userData.tickets_peru} />
-                        <ItemIcon icon={FaTicketAlt} color="silver" count={userData.tickets_silver} />
-                        <ItemIcon icon={FaTicketAlt} color="gold" count={userData.tickets_gold} />
-                        <ItemIcon icon={FaTicketAlt} color="plum" count={userData.tickets_plum} />
+                        <ItemIcon icon={FaTicketAlt} color={DIFFICULTY_COLOR_MAP[1]} count={userData.ticketsVeryEasy} />
+                        <ItemIcon icon={FaTicketAlt} color={DIFFICULTY_COLOR_MAP[2]} count={userData.ticketsEasy} />
+                        <ItemIcon icon={FaTicketAlt} color={DIFFICULTY_COLOR_MAP[3]} count={userData.ticketsNormal} />
+                        <ItemIcon icon={FaTicketAlt} color={DIFFICULTY_COLOR_MAP[4]} count={userData.ticketsHard} />
+                        <ItemIcon icon={FaTicketAlt} color={DIFFICULTY_COLOR_MAP[5]} count={userData.ticketsVeryHard} />
                     </HStack>
                 </Flex>
 

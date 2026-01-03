@@ -34,6 +34,7 @@ const HabitItem = ({ habit, handleEdit }) => {
             border="solid"
             borderColor="gray.200"
             borderWidth="1px"
+            overflow="hidden"
             onClick={handleEdit}
             // gap="5"
             >
