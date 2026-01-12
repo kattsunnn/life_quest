@@ -80,7 +80,8 @@ const UserProvider = ({children}) => {
         dispatch({ type: "user/patch", user: userServerToClient(res) })
       },
       subCoins: async (amount) => {
-        const res = await userApi.patch(userId, {coins: user.coins - amount})
+        const newCoins = Math.max(user.coins - amount, 0)
+        const res = await userApi.patch(userId, {coins: newCoins})
         dispatch({ type: "user/patch", user: userServerToClient(res) })
       },
       addTickets: async (difficulty, amount) => {
@@ -93,7 +94,8 @@ const UserProvider = ({children}) => {
       subTickets: async (difficulty, amount) => {
         const difficultyName = DIFFICULTY_NAME_MAP[difficulty]
         const currentTickets = user[difficultyName]
-        const updates = { [difficultyName]: currentTickets - amount }
+        const newTickets = Math.max(currentTickets - amount, 0)
+        const updates = { [difficultyName]: newTickets }
         const res =  await userApi.patch(userId, userClientToServer(updates))
         dispatch({ type:"user/patch", user: userServerToClient(res)})
       },

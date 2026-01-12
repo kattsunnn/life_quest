@@ -19,7 +19,7 @@ const RewardList = () => {
     return (
         <>
             <Accordion.Root collapsible multiple defaultValue={["rewards"]}>
-                <AccordionSection value="rewards" title="reward">
+                <AccordionSection value="rewards" title="ご褒美">
                     <Flex
                         direction="column"
                         gap="1">

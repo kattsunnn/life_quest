@@ -4,14 +4,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class User(models.Model):
     name = models.CharField(max_length=100)
-    coins = models.IntegerField(default=0)
-    exp = models.IntegerField(default=0)
-    level = models.IntegerField(default=1)
-    tickets_very_hard = models.IntegerField(default=0)
-    tickets_hard = models.IntegerField(default=0)
-    tickets_normal = models.IntegerField(default=0)
-    tickets_easy= models.IntegerField(default=0)
-    tickets_very_easy= models.IntegerField(default=0)
+    coins = models.PositiveIntegerField(default=0)
+    exp = models.PositiveIntegerField(default=0)
+    level = models.PositiveIntegerField(default=1)
+    tickets_very_hard = models.PositiveIntegerField(default=0)
+    tickets_hard = models.PositiveIntegerField(default=0)
+    tickets_normal = models.PositiveIntegerField(default=0)
+    tickets_easy= models.PositiveIntegerField(default=0)
+    tickets_very_easy= models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

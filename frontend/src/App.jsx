@@ -36,6 +36,7 @@ function App() {
                                 <Route path="todo" element={<TodoList />} />
                                 <Route path="habit" element={<HabitList />} />
                                 <Route path="reward" element={<RewardList />}/>
+                                <Route path="setting" element={<></>}/>
                                 <Route path="add/:type" element={<DialogWrapper />} />
                                 <Route path="edit/:type" element={<DialogWrapper />}/>
                             </Route>

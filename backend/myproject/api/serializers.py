@@ -40,6 +40,25 @@ class UserUpdateSerializer(serializers.Serializer):
     tickets_easy = serializers.IntegerField(required=False)
     tickets_very_easy = serializers.IntegerField(required=False)
 
+    def validate(self, attrs):
+        errors = {}
+        for field in (
+            "level",
+            "exp",
+            "coins",
+            "tickets_very_hard",
+            "tickets_hard",
+            "tickets_normal",
+            "tickets_easy",
+            "tickets_very_easy",
+        ):
+            v = attrs.get(field)
+            if v is not None and v < 0:
+                errors[field] = "値は0以上である必要があります"
+        if errors:
+            raise serializers.ValidationError(errors)
+        return attrs
+
     def update(self, instance, validated_data):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
