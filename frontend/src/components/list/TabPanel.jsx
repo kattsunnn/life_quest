@@ -13,7 +13,6 @@ const TabPanel = () => {
                 pt="5"
                 pb="20"
                 flex="1"
-                gap="1"
                 overflow="scroll"
                 align="center"
                 bg="gray.100"

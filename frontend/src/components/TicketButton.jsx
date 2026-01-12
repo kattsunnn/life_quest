@@ -1,4 +1,4 @@
-import { Button, HStack, Text } from "@chakra-ui/react"
+import { Button } from "@chakra-ui/react"
 import { FaTicketAlt } from "react-icons/fa"
 import { useUserActions } from "../context/userContext"
 
@@ -10,7 +10,7 @@ import { useUserActions } from "../context/userContext"
     5: "turquoise",
     }
 
-const TicketButton = ({ difficulty, handleDelete }) => {
+const TicketButton = ({ difficulty, handleEdit }) => {
     
     const { hasEnoughTickets, subTickets } = useUserActions();
     
@@ -19,9 +19,8 @@ const TicketButton = ({ difficulty, handleDelete }) => {
     const handlePurchase = async(e) => {
         e.stopPropagation()
         try {
-            if(!hasEnoughTickets(difficulty)) return
+            await handleEdit()
             await subTickets( difficulty, 1 )
-            handleDelete()
         } catch(error) {
             alert(error.message)
             console.log(error)

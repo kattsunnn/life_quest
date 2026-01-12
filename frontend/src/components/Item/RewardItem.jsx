@@ -1,17 +1,15 @@
 import { useRewardActions } from "../../context/rewardContext"
-import { useUserActions } from "../../context/userContext"
 import { HStack, Text, Spacer } from "@chakra-ui/react"
-import { FaCoins } from "react-icons/fa"
 import PriceButton from "../PriceButton"
 import TicketButton from "../TicketButton"
 
 const RewardItem = ({ reward, handleEdit }) => {
 
-    const { deleteReward } = useRewardActions()
+    const { editReward } = useRewardActions()
 
-    const handleDelete = async () => {
+    const setIsPurchased = async() => {
         try {
-            await deleteReward(reward.id)
+            await editReward(reward.id, {isPurchased: true})
         } catch(error) {
             alert(error.message)
             console.log(error)
@@ -33,9 +31,8 @@ const RewardItem = ({ reward, handleEdit }) => {
             >
             <Text textStyle="sm" fontWeight="medium" truncate>{reward.name}</Text>
             <Spacer />
-            <PriceButton price={reward.price} handleDelete={handleDelete}></PriceButton>
-            <TicketButton difficulty={reward.difficulty} handleDelete={handleDelete}/>
-            <></>
+            <PriceButton price={reward.price} handleEdit={setIsPurchased}></PriceButton>
+            <TicketButton difficulty={reward.difficulty} handleEdit={setIsPurchased} />
         </HStack>
     )
 }

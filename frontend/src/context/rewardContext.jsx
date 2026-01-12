@@ -8,7 +8,7 @@ const RewardActionsContext = createContext();
 function rewardServerToClient(reward) {
     const mapping = {
         user_id: "userId",
-        is_completed: "isCompleted",
+        is_purchased: "isPurchased",
         created_at: "createdAt",
         updated_at: "updatedAt",
     };
@@ -24,7 +24,7 @@ function rewardServerToClient(reward) {
 function rewardClientToServer(reward) {
     const mapping = {
         userId: "user_id",
-        isCompleted: "is_completed",
+        isPurchased: "is_purchased",
         createdAt: "created_at",
         updatedAt: "updated_at",
     };
@@ -114,7 +114,9 @@ const RewardProvider = ({children}) => {
         deleteReward: async (rewardId) => {
             const rewardRes = await rewardApi.delete(rewardId)
             dispatch({ type: "reward/delete", reward: rewardServerToClient(rewardRes) })
-        }
+        },
+        getPurchasedRewards: () => {  return rewards.filter(t => t.isPurchased) },
+        getUnpurchasedRewards: () => { return rewards.filter(t => !t.isPurchased) },
     }
 
     return (

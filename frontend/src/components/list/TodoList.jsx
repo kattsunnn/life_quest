@@ -1,11 +1,16 @@
-import { useTodo } from "../../context/TodoContext";
+import { useTodoActions } from "../../context/TodoContext";
 import { useNavigate } from "react-router-dom";
+import { Accordion, Flex } from "@chakra-ui/react"
 
+import AccordionSection from "./AcoordionSection";
 import TodoItem from "../Item/TodoItem"
 
 const TodoList = () => {
 
-    const todos = useTodo();
+    const { getCompletedTodos, getIncompletedTodos } = useTodoActions();
+    const completedTodos = getCompletedTodos();
+    const incompletedTodos = getIncompletedTodos();
+    
     const navigate = useNavigate();
     
     const handleEdit = (data) => {
@@ -14,13 +19,34 @@ const TodoList = () => {
 
     return (
         <>
-            {todos.map((todo) => (
-                <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    handleEdit={() => handleEdit(todo)}
-                />
-            ))}
+            <Accordion.Root collapsible multiple defaultValue={["todos"]}>
+                <AccordionSection value="todos" title="Todo">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {incompletedTodos.map((todo) => (
+                            <TodoItem
+                                key={todo.id}
+                                todo={todo}
+                                handleEdit={() => handleEdit(todo)}
+                                />
+                        ))}
+                    </Flex>
+                </AccordionSection>
+                <AccordionSection value="completed" title="完了">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {completedTodos.map((todo) => (
+                            <TodoItem
+                                key={todo.id}
+                                todo={todo}
+                                handleEdit={() => handleEdit(todo)}
+                            />
+                    ))}
+                    </Flex>
+                </AccordionSection>
+            </Accordion.Root>
         </>
     )
 }

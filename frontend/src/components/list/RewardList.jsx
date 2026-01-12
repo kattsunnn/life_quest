@@ -1,25 +1,51 @@
-import { useReward } from "../../context/rewardContext";
+import { useRewardActions } from "../../context/rewardContext";
 import { useNavigate } from "react-router-dom";
+import { Accordion, Flex } from "@chakra-ui/react"
+
+import AccordionSection from "./AcoordionSection";
 import RewardItem from "../Item/RewardItem"
 
 const RewardList = () => {
 
-    const rewards = useReward();
+    const { getPurchasedRewards, getUnpurchasedRewards } = useRewardActions()
+    const purchasedRewards = getPurchasedRewards()
+    const unpurchasedRewards = getUnpurchasedRewards()
+
     const navigate = useNavigate();
-    
     const handleEdit = (data) => {
         navigate(`/static/edit/reward`, { state: { editData: data } });
     }
 
     return (
         <>
-            {rewards.map((reward) => (
-                <RewardItem
-                    key={reward.id}
-                    reward={reward}
-                    handleEdit={() => handleEdit(reward)}
-                />
-            ))}
+            <Accordion.Root collapsible multiple defaultValue={["rewards"]}>
+                <AccordionSection value="rewards" title="reward">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {unpurchasedRewards.map((reward) => (
+                            <RewardItem
+                                key={reward.id}
+                                reward={reward}
+                                handleEdit={() => handleEdit(reward)}
+                                />
+                        ))}
+                    </Flex>
+                </AccordionSection>
+                <AccordionSection value="purchased" title="購入済み">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {purchasedRewards.map((reward) => (
+                            <RewardItem
+                                key={reward.id}
+                                reward={reward}
+                                handleEdit={() => handleEdit(reward)}
+                            />
+                    ))}
+                    </Flex>
+                </AccordionSection>
+            </Accordion.Root>
         </>
     )
 }

@@ -116,7 +116,9 @@ const TodoProvider = ({children}) => {
         deleteTodo: async (todoId) => {
             const todoData = await todoApi.delete(todoId)
             dispatch({ type: "todo/delete", todo: todoServerToClient(todoData) })
-        }
+        },
+        getCompletedTodos: () => {  return todos.filter(t => t.isCompleted) },
+        getIncompletedTodos: () => { return todos.filter(t => !t.isCompleted) },
     }
 
     return (

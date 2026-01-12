@@ -132,7 +132,9 @@ const HabitProvider = ({children}) => {
         deleteHabit: async (habitId) => {
             const habitData = await habitApi.delete(habitId)
             dispatch({ type: "habit/delete", habit: habitServerToClient(habitData) })
-        }
+        },
+        getCompletedHabits: () => {  return habits.filter(t => t.isCompleted) },
+        getIncompletedHabits: () => { return habits.filter(t => !t.isCompleted) },
     }
 
     return (
