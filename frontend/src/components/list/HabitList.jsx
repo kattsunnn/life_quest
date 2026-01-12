@@ -32,7 +32,20 @@ const HabitList = () => {
                         ))}
                     </Flex>
                 </AccordionSection>
-                <AccordionSection value="completed" title="完了">
+                <AccordionSection value="completed_today" title="達成済み（今日）">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {completedHabits.map((habit) => (
+                            <HabitItem
+                                key={habit.id}
+                                habit={habit}
+                                handleEdit={() => handleEdit(habit)}
+                            />
+                    ))}
+                    </Flex>
+                </AccordionSection>
+                <AccordionSection value="completed_past" title="達成済み（過去）">
                     <Flex
                         direction="column"
                         gap="1">

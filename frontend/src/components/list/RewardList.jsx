@@ -32,7 +32,20 @@ const RewardList = () => {
                         ))}
                     </Flex>
                 </AccordionSection>
-                <AccordionSection value="purchased" title="購入済み">
+                <AccordionSection value="purchased_today" title="獲得済み（今日）">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {purchasedRewards.map((reward) => (
+                            <RewardItem
+                                key={reward.id}
+                                reward={reward}
+                                handleEdit={() => handleEdit(reward)}
+                            />
+                    ))}
+                    </Flex>
+                </AccordionSection>
+                <AccordionSection value="purchased_past" title="獲得済み（過去）">
                     <Flex
                         direction="column"
                         gap="1">

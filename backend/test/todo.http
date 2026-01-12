@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:8000/api
 @userId = 4
 
-GET {{baseUrl}}/users/{{userId}}/todos/
+GET {{baseUrl}}/users/{{userId}}/todos/?page=1&limit=3
 Accept: application/json
 
 ###

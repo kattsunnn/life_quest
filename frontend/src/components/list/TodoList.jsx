@@ -7,7 +7,7 @@ import TodoItem from "../Item/TodoItem"
 
 const TodoList = () => {
 
-    const { getCompletedTodos, getIncompletedTodos } = useTodoActions();
+    const { getCompletedTodayTodos, getCompletedPastTodos, getIncompletedTodos } = useTodoActions();
     const completedTodos = getCompletedTodos();
     const incompletedTodos = getIncompletedTodos();
     
@@ -33,7 +33,20 @@ const TodoList = () => {
                         ))}
                     </Flex>
                 </AccordionSection>
-                <AccordionSection value="completed" title="完了">
+                <AccordionSection value="completed_today" title="達成済み（今日）">
+                    <Flex
+                        direction="column"
+                        gap="1">
+                        {completedTodos.map((todo) => (
+                            <TodoItem
+                                key={todo.id}
+                                todo={todo}
+                                handleEdit={() => handleEdit(todo)}
+                            />
+                    ))}
+                    </Flex>
+                </AccordionSection>
+                <AccordionSection value="completed_past" title="達成済み（過去）">
                     <Flex
                         direction="column"
                         gap="1">

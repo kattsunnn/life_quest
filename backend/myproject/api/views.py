@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 import json
 from .models import User, Todo, Habit, Reward
 from django.shortcuts import render, get_object_or_404
@@ -69,9 +70,28 @@ class UserDetailView(APIView):
     
 class TodoListView(APIView):
     def get(self, request, user_id):
-        todos = Todo.objects.filter(user_id=user_id)
-        serializer = TodoGetSerializer(todos, many=True)
-        return Response(serializer.data)
+
+        try:
+            page = max(int(request.query_params.get('page', 1)), 1)
+        except (TypeError, ValueError):
+            page = 1
+        try:
+            limit = max(int(request.query_params.get('limit', 20)), 1)
+        except (TypeError, ValueError):
+            limit = 20
+
+        today = timezone.localdate()
+        today_todos = Todo.objects.filter(user_id=user_id, created_at__date=today).order_by('-created_at')
+
+        offset = (page - 1) * limit
+        past_todos = Todo.objects.filter(user_id=user_id).exclude(created_at__date=today).order_by('-updated_at')[offset:offset + limit]
+
+        return Response({
+            "today": TodoGetSerializer(today_todos, many=True).data,
+            "past": TodoGetSerializer(past_todos, many=True).data,
+            "page": page,
+            "limit": limit
+        }, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
         data = request.data.copy()
@@ -109,9 +129,27 @@ class TodoDetailView(APIView):
 
 class HabitListView(APIView):
     def get(self, request, user_id):
-        habits = Habit.objects.filter(user_id=user_id)
-        serializer = HabitGetSerializer(habits, many=True)
-        return Response(serializer.data)
+        try:
+            page = max(int(request.query_params.get('page', 1)), 1)
+        except (TypeError, ValueError):
+            page = 1
+        try:
+            limit = max(int(request.query_params.get('limit', 20)), 1)
+        except (TypeError, ValueError):
+            limit = 20
+
+        today = timezone.localdate()
+        today_habits = Habit.objects.filter(user_id=user_id, created_at__date=today).order_by('-created_at')
+
+        offset = (page - 1) * limit
+        past_habits = Habit.objects.filter(user_id=user_id).exclude(created_at__date=today).order_by('-updated_at')[offset:offset + limit]
+
+        return Response({
+            "today": HabitGetSerializer(today_habits, many=True).data,
+            "past": HabitGetSerializer(past_habits, many=True).data,
+            "page": page,
+            "limit": limit
+        }, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
         data = request.data.copy()
@@ -148,9 +186,27 @@ class HabitDetailView(APIView):
 
 class RewardListView(APIView):
     def get(self, request, user_id):
-        rewards = Reward.objects.filter(user_id=user_id)
-        serializer = RewardGetSerializer(rewards, many=True)
-        return Response(serializer.data)
+        try:
+            page = max(int(request.query_params.get('page', 1)), 1)
+        except (TypeError, ValueError):
+            page = 1
+        try:
+            limit = max(int(request.query_params.get('limit', 20)), 1)
+        except (TypeError, ValueError):
+            limit = 20
+
+        today = timezone.localdate()
+        today_rewards = Reward.objects.filter(user_id=user_id, created_at__date=today).order_by('-created_at')
+
+        offset = (page - 1) * limit
+        past_rewards = Reward.objects.filter(user_id=user_id).exclude(created_at__date=today).order_by('-updated_at')[offset:offset + limit]
+
+        return Response({
+            "today": RewardGetSerializer(today_rewards, many=True).data,
+            "past": RewardGetSerializer(past_rewards, many=True).data,
+            "page": page,
+            "limit": limit
+        }, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
         data = request.data.copy()
