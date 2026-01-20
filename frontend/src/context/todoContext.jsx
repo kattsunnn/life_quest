@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useReducer } from "react"
 import todoApi from "../api/todo"
 
 const TodoContext = createContext();
-const TodoDispatchContext = createContext();
 const TodoActionsContext = createContext();
 
 function todoServerToClient(todo) {
@@ -10,6 +9,7 @@ function todoServerToClient(todo) {
         user_id: "userId",
         name: "taskName",
         is_completed: "isCompleted",
+        completed_at: "completedAt",
         created_at: "createdAt",
         updated_at: "updatedAt",
     };
@@ -27,6 +27,7 @@ function todoClientToServer(todo) {
         userId: "user_id",
         taskName: "name",
         isCompleted: "is_completed",
+        completedAt: "completed_at",
         createdAt: "created_at",
         updatedAt: "updated_at",
     };
@@ -37,16 +38,6 @@ function todoClientToServer(todo) {
         }
     }
     return result;
-}
-
-const sortTodos = (todos) => {
-    const sorted = [...todos].sort((a, b) => {
-        if (a.isCompleted !== b.isCompleted) {
-            return a.isCompleted ? 1 : -1;
-        }
-        return new Date(b.updatedAt) - new Date(a.updatedAt);
-    });
-    return sorted;
 }
 
 const validateTodo = (data) => {
@@ -67,74 +58,123 @@ const validateTodo = (data) => {
     }
 }
 
+const isSameLocalDate = (a, b) => {
+    if (!a || !b) return false;
+    const toDate = (v) => (v instanceof Date ? v : new Date(v));
+    const d1 = toDate(a);
+    const d2 = toDate(b);
+    return d1.getFullYear() === d2.getFullYear()
+        && d1.getMonth() === d2.getMonth()
+        && d1.getDate() === d2.getDate();
+}
+
+const initialTodos = {
+    incompleted: [],
+    completedToday: [],
+    completedPast: {
+        todos: [],
+        totalCount: 0,
+        page: 1,
+        limit: 5
+    } 
+}
+
 const todoReducer = (todos, action) => {
-    let newTodos;
-
-    switch (action.type) {
-    case "todo/init":
-        return sortTodos(action.todos);
-
-    case "todo/add": 
-        newTodos = [...todos, action.todo];
-        return sortTodos(newTodos);
-
-    case "todo/delete":
-        newTodos = todos.filter(todo => todo.id !== action.todo.id);
-        return sortTodos(newTodos);
-
-    case "todo/patch":
-        newTodos = todos.map(todo => 
-            todo.id === action.todo.id ? action.todo : todo
-        );
-        return sortTodos(newTodos);
-    default:
-        return todos;
+    switch(action.type) {
+        case "LOAD":
+            return {
+                incompleted: action.payload.incompleted,
+                completedToday: action.payload.completedToday,
+                completedPast: {
+                    ...todos.completedPast,
+                    todos: action.payload.completedPast,
+                    totalCount: action.payload.totalCount,
+                }
+            }
+        case "ADD":
+            return {
+                ...todos,
+                incompleted: [...todos.incompleted, action.todo]
+            }
+        case "PAGINATE":
+            return {
+                ...todos, 
+                completedPast: {
+                    ...todos.completedPast,
+                    todos: action.payload.todos,
+                    page: action.payload.page
+                }
+            }
     }
-};
+}
 
 const TodoProvider = ({children}) => {
-    const [ todos, dispatch ] = useReducer(todoReducer, [])
+    const [ todos, dispatch ] = useReducer(todoReducer, initialTodos)
     const userId = 4;
 
+    const today = new Date();
+    const yyyy = today.getFullYear()
+    const mm = String(today.getMonth()+1).padStart(2, '0')
+    const dd = String(today.getDate()).padStart(2, '0')
+    const todayStr = `${yyyy}-${mm}-${dd}`
+
+    const load = async() => {
+        try {
+            const [incompletedRes, completedTodayRes, completedPastRes, totalCountRes] = await Promise.all([
+                todoApi.get(userId, { completed:false, sort: "-updated_at" }),
+                todoApi.get(userId, { completed:true, completed_at: todayStr, sort: "-completed_at" }),
+                todoApi.get(userId, { completed:true, completed_before: todayStr, sort: "-completed_at", page: todos.completedPast.page, limit: todos.completedPast.limit }),
+                todoApi.get(userId, { completed:true, completed_before: todayStr, limit: 0 }), ])
+            const incompletedTodos = incompletedRes.map(todoServerToClient)
+            const completedTodayTodos = completedTodayRes.map(todoServerToClient)
+            const completedPastTodos = completedPastRes.map(todoServerToClient)
+            const totalCount = totalCountRes.count
+            dispatch({  type: "LOAD",  payload: {   incompleted: incompletedTodos, 
+                                                    completedToday: completedTodayTodos, 
+                                                    completedPast: completedPastTodos, 
+                                                    totalCount: totalCount }})
+        } catch(err) {
+            console.error(err)                
+        } 
+    }
+
     useEffect(() => {
-        todoApi.get(userId).then(todos => {
-            dispatch({ type: "todo/init", todos: todos.map(todo => todoServerToClient(todo))})
-        })
-    }, [])
+        load()
+    }, [userId])
 
     const actions = {
         createTodo: async (todo) => {
             validateTodo(todo)
             const todoData = await todoApi.post(userId, todoClientToServer(todo))
-            dispatch({ type: "todo/add", todo: todoServerToClient(todoData) })
+            dispatch({ type: "ADD", todo: todoServerToClient(todoData) })
         },
         editTodo: async (todoId, updates) => {
             validateTodo(updates)
-            const todoData = await todoApi.patch(todoId, todoClientToServer(updates))
-            dispatch({ type: "todo/patch", todo: todoServerToClient(todoData) })
+            await todoApi.patch(todoId, todoClientToServer(updates))
+            load()
         },
         deleteTodo: async (todoId) => {
-            const todoData = await todoApi.delete(todoId)
-            dispatch({ type: "todo/delete", todo: todoServerToClient(todoData) })
+            await todoApi.delete(todoId)
+            load()
         },
-        getCompletedTodos: () => {  return todos.filter(t => t.isCompleted) },
-        getIncompletedTodos: () => { return todos.filter(t => !t.isCompleted) },
+        paginateCompletedPastTodos: async (page) => {
+            const paginatedRes = await todoApi.get(userId, { completed: true, completed_before: todayStr, sort: "-completed_at", page: page, limit: 5 })
+            const paginatedTodos = paginatedRes.map(todoServerToClient)
+            dispatch({ type: "PAGINATE", payload: { todos: paginatedTodos, page: page } })
+         }
     }
 
     return (
         <TodoContext.Provider value={todos}>
-            <TodoDispatchContext.Provider value={dispatch}>
-                <TodoActionsContext.Provider value={actions}>
-                    {children}
-                </TodoActionsContext.Provider>
-            </TodoDispatchContext.Provider>
+            <TodoActionsContext.Provider value={actions}>
+                {children}
+            </TodoActionsContext.Provider>
         </TodoContext.Provider>
     )
 }
 
 const useTodo = () => useContext(TodoContext)
-const useDispatchTodo = () => useContext(TodoDispatchContext)
 const useTodoActions = () => useContext(TodoActionsContext)
 
-export { useTodo, useDispatchTodo, useTodoActions, TodoProvider };
+export { useTodo, useTodoActions, TodoProvider };
 

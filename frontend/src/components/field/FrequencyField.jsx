@@ -3,7 +3,6 @@ import { Field, VStack, SegmentGroup } from "@chakra-ui/react"
 import WeekdaySelector from "./WeekdaySelector"
 
 const FrequencyField = ({weekdays, onChange}) => {
-    console.log(weekdays)
     const [ frequency, setFrequency ] = useState("")
 
     useEffect(() => {

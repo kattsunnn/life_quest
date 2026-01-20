@@ -28,8 +28,22 @@ class Todo(models.Model):
     reward = models.IntegerField(default=1, validators=[MinValueValidator(1),])
     memo = models.TextField(blank=True, default='')
     is_completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = Todo.objects.get(pk=self.pk)
+            if not old_instance.is_completed and self.is_completed:
+                self.completed_at = timezone.now()
+            elif old_instance.is_completed and not self.is_completed:
+                self.completed_at = None
+            else:
+                if self.is_completed and not self.completed_at:
+                    self.completed_at = timezone.now()
+        super().save(*args, **kwargs)
+                
 
     class Meta:
         ordering = ['-updated_at']

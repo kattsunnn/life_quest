@@ -73,6 +73,7 @@ class TodoGetSerializer(serializers.Serializer):
     reward = serializers.IntegerField(read_only=True)
     memo = serializers.CharField(read_only=True)
     is_completed = serializers.BooleanField(read_only=True)
+    completed_at = serializers.DateTimeField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
 

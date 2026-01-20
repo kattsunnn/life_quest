@@ -1,7 +1,7 @@
 @baseUrl = http://localhost:8000/api
 @userId = 4
 
-GET {{baseUrl}}/users/{{userId}}/todos/?page=1&limit=3
+GET {{baseUrl}}/users/{{userId}}/todos/?completed_before=2026-01-20&limit=5&page=2
 Accept: application/json
 
 ###
@@ -10,15 +10,14 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "name":"お風呂洗い",
+    "name":"洗濯",
     "difficulty":3,
     "reward":7,
-    "memo":"３時までにやる"
+    "memo":"3時までにやる"
 }
 
-
 ####
-@todoId = 28
+@todoId = 90
 
 ####
 GET {{baseUrl}}/todos/{{todoId}}/
@@ -30,7 +29,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
- "name": "お洗濯"
+    "is_completed": true
 }
 
 ###
