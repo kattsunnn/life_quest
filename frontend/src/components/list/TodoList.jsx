@@ -68,40 +68,40 @@ const TodoList = () => {
                                 handleEdit={() => handleEdit(todo)}
                             />
                         ))}
-<Center>
-    <Pagination.Root    
-        defaultPage={1} 
-        count={todos.completedPast.totalCount}
-        pageSize={todos.completedPast.limit}
-        onPageChange={(e) => paginateCompletedPastTodos(e.page)} >
-        <ButtonGroup variant="ghost" size="xs">
-            <Pagination.PrevTrigger asChild>
-                <IconButton>
-                    <LuChevronLeft />
-                </IconButton>
-            </Pagination.PrevTrigger>
+                    <Center>
+                        <Pagination.Root    
+                            defaultPage={1} 
+                            count={todos.completedPast.totalCount}
+                            pageSize={todos.completedPast.limit}
+                            onPageChange={(e) => paginateCompletedPastTodos(e.page)} >
+                            <ButtonGroup variant="ghost" size="xs">
+                                <Pagination.PrevTrigger asChild>
+                                    <IconButton>
+                                        <LuChevronLeft />
+                                    </IconButton>
+                                </Pagination.PrevTrigger>
 
-            <Pagination.Items
-            render={(page) => (
-                <IconButton variant={{ base: "ghost", _selected: "outline" }}>
-                {page.value}
-                </IconButton>
-            )}
-            />
+                                <Pagination.Items
+                                render={(page) => (
+                                    <IconButton variant={{ base: "ghost", _selected: "outline" }}>
+                                    {page.value}
+                                    </IconButton>
+                                )}
+                                />
 
-            <Pagination.NextTrigger asChild>
-                <IconButton>
-                    <LuChevronRight />
-                </IconButton>
-            </Pagination.NextTrigger>
-        </ButtonGroup>
-    </Pagination.Root>
-</Center>
-                    </Flex>
-                </AccordionSection>
-            </Accordion.Root>
-        </>
-    )
-}
+                                <Pagination.NextTrigger asChild>
+                                    <IconButton>
+                                        <LuChevronRight />
+                                    </IconButton>
+                                </Pagination.NextTrigger>
+                            </ButtonGroup>
+                        </Pagination.Root>
+                        </Center>
+                        </Flex>
+                    </AccordionSection>
+                </Accordion.Root>
+            </>
+        )
+    }
 
-export default TodoList
+    export default TodoList
